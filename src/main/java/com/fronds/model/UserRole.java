@@ -1,4 +1,4 @@
-package com.fronds.database.model;
+package com.fronds.model;
 
 public enum UserRole {
     REGULAR, ADMIN;

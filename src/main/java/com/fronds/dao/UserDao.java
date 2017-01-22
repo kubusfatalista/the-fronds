@@ -1,14 +1,13 @@
-package com.fronds.util;
-
-import com.fronds.database.model.User;
-import org.springframework.stereotype.Component;
+package com.fronds.dao;
 
 import java.util.List;
+
+import com.fronds.model.User;
 
 /**
  * Created by Qbek on 2016-12-13.
  */
-@Component
+
 public interface UserDao {
     public User saveUser(User user);
     public User getUserByLogin(String login);

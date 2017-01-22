@@ -1,60 +1,50 @@
-package com.fronds.util;
+package com.fronds.dao.impl;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-import com.fronds.database.model.User;
-import com.fronds.database.util.HibernateUtil;
+import com.fronds.dao.AbstractDao;
+import com.fronds.dao.UserDao;
+import com.fronds.model.User;
 
 /**
  * Created by Qbek on 2016-12-13.
  */
-@Component
-public class UserDaoImpl implements UserDao {
-	@Override
-	public User saveUser(User user) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		session.save(user);
-		session.getTransaction().commit();
+
+@Repository("userDao")
+public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
+	
+	public User saveUser(User user) {	
+		save(user);
 		return user;
 	}
 
-	@Override
 	public User getUserByLogin(String login) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
 		
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		
-		CriteriaQuery<User> criteria = builder.createQuery(User.class);
+		CriteriaQuery<User> criteria = getCriteriaBuilder().createQuery(User.class);
 		Root<User> root = criteria.from(User.class);
 		criteria.select(root);
-		criteria.where(builder.equal(root.get("login"), login));
+		criteria.where(getCriteriaBuilder().equal(root.get("login"), login));
 		
-		User user = session.createQuery(criteria).getSingleResult();
-		session.getTransaction().commit();
+		User user = getSession()
+				.createQuery(criteria)
+				.setCacheable(true)
+				.setCacheRegion("user")
+				.getSingleResult();
 		return user;
 	}
 
-	@Override
 	public List<User> getUserList() {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
-		
-		CriteriaBuilder builder = session.getCriteriaBuilder();
 
-		CriteriaQuery<User> criteria = builder.createQuery(User.class);
+		CriteriaQuery<User> criteria = getCriteriaBuilder().createQuery(User.class);
 		Root<User> root = criteria.from(User.class);
 		criteria.select(root);
 
-		List<User> userList = session.createQuery(criteria).getResultList();
+		List<User> userList = getSession().createQuery(criteria).getResultList();
 
 		return userList;
 	}

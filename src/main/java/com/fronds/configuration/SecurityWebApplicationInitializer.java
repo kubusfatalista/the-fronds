@@ -1,4 +1,4 @@
-package com.fronds.web.config;
+package com.fronds.configuration;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

@@ -11,17 +11,23 @@
 		<property name="hibernate.connection.password">admin</property>
 
 		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.show_sql">true</property>
 
 		<property name="hibernate.c3p0.min_size">5</property>
 		<property name="hibernate.c3p0.max_size">20</property>
 		<property name="hibernate.c3p0.timeout">300</property>
 		<property name="hibernate.c3p0.max_statements">50</property>
 		<property name="hibernate.c3p0.idle_test_period">3000</property>
+		
+		<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
 
 		<!-- org.hibernate.HibernateException: No CurrentSessionContext configured! -->
-		<property name="hibernate.current_session_context_class">thread</property>
+		<!-- <property name="hibernate.current_session_context_class">thread</property> -->
 
 		<!-- Mapping with model class containing annotations -->
-		<mapping class="com.fronds.database.model.User" />
+		<!-- <mapping class="com.fronds.database.model.User" /> -->
 	</session-factory>
 </hibernate-configuration>

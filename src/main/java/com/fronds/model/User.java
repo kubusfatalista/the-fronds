@@ -1,4 +1,6 @@
-package com.fronds.database.model;
+package com.fronds.model;
+
+import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -6,20 +8,26 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 @Access(value= AccessType.FIELD)
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private long id;
+    private long userId;
     @Column
     private String login;
     @Column
@@ -34,15 +42,17 @@ public class User {
     private String profilePicture;
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<PhotoAlbum> photoAlbums;
 
-    public User() { }
+	public User() { }
 
     public long getId() {
-        return id;
+        return userId;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public String getLogin() {
@@ -100,4 +110,12 @@ public class User {
     public void setRole(UserRole role) {
         this.role = role;
     }
+    
+    public Set<PhotoAlbum> getPhotoAlbums() {
+		return photoAlbums;
+	}
+
+	public void setPhotoAlbums(Set<PhotoAlbum> photoAlbums) {
+		this.photoAlbums = photoAlbums;
+	}
 }

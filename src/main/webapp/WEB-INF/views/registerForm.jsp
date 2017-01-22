@@ -11,7 +11,7 @@
      </head>
      <body>
         <h1>Rejestracja</h1>
-        <sf:form method="POST" commandName="userWEB" enctype="multipart/form-data">
+        <sf:form method="POST" commandName="user" enctype="multipart/form-data">
             <sf:errors path="*" element="div" cssClass="errors" />
             <sf:label path="firstName" cssErrorClass="error">Imię:</sf:label>
             <sf:input path="firstName" cssErrorClass="error" /><br/>

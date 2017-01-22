@@ -20,4 +20,7 @@
     <definition name="allUsers" extends="base">
         <put-attribute name="body" value="/WEB-INF/views/allUsers.jsp" />
     </definition>
+        <definition name="userAlbums" extends="base">
+        <put-attribute name="body" value="/WEB-INF/views/userAlbums.jsp" />
+    </definition>
 </tiles-definitions>

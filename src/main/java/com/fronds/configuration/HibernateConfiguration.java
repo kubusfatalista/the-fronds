@@ -1,41 +1,38 @@
-package com.fronds.database.util;
-
+package com.fronds.configuration;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Created by Qbek on 2016-12-13.
  */
-public class HibernateUtil {
 
-    //Annotation based configuration
-    private static SessionFactory sessionAnnotationFactory;
-
-    private static SessionFactory buildSessionAnnotationFactory() {
-        try {
-            // Create the SessionFactory from hibernate.cfg.xml
-            Configuration configuration = new Configuration();
-            configuration.configure("hibernate-annotation.cfg.xml");
-            System.out.println("Hibernate Annotation Configuration loaded");
-
-//            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-            System.out.println("Hibernate Annotation serviceRegistry created");
-
-            SessionFactory sessionFactory = configuration.buildSessionFactory();
-
-            return sessionFactory;
-        }
-        catch (Throwable ex) {
-            // Make sure you log the exception, as it might be swallowed
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
+@Configuration
+@EnableTransactionManagement
+@ComponentScan({ "com.fronds.configuration" })
+public class HibernateConfiguration {
+ 
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        
+        sessionFactory.setConfigLocation(new ClassPathResource("hibernate.cfg.xml"));
+        sessionFactory.setPackagesToScan(new String[] { "com.fronds.model" });
+        return sessionFactory;
+     }
+     
+    @Bean
+    @Autowired
+    public HibernateTransactionManager transactionManager(SessionFactory s) {
+       HibernateTransactionManager txManager = new HibernateTransactionManager();
+       txManager.setSessionFactory(s);
+       return txManager;
     }
-
-    public static SessionFactory getSessionFactory() { // z adnotacjami, ale powiedzmy ze tego sposobu bede sie uczyl
-        if(sessionAnnotationFactory == null) sessionAnnotationFactory = buildSessionAnnotationFactory();
-        return sessionAnnotationFactory;
-    }
-
 }

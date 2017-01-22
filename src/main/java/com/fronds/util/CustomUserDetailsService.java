@@ -1,6 +1,8 @@
 package com.fronds.util;
 
-import com.fronds.database.model.User;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fronds.model.User;
+import com.fronds.service.UserService;
 
 /**
  * Created by Qbek on 2016-12-13.
@@ -19,11 +21,11 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String s) {
-        User user = userDao.getUserByLogin(s);
+        User user = userService.getUserByLogin(s);
         if(user != null) {
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(user.getRole().authority()));

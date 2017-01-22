@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf"%>
 <html>
 <head>
 <title>Uzyszkodnik</title>
@@ -108,8 +109,8 @@ to {
 	<br />
 	<c:out value="${user.firstName}" />
 	<c:out value="${user.lastName}" />
-	<img id="myImg" alt="${user.firstName}" src="profile/imageDisplay${content}" width="250"
-		height="250" />
+	<img id="myImg" alt="${user.firstName}"
+		src="profile/imageDisplay${content}" width="250" height="250" />
 
 	<!-- The Modal -->
 	<div id="myModal" class="modal">
@@ -117,6 +118,13 @@ to {
 			id="img01">
 		<div id="caption"></div>
 	</div>
+	<sf:form method="POST" action="profile/addPhoto"
+		enctype="multipart/form-data">
+		<input type="file" name="addedPhoto"
+			accept="image/jpeg,image/png,image/gif" />
+		<br />
+		<input type="submit" value="Dodaj do galerii" />
+	</sf:form>
 	<script>
 		// Get the modal
 		var modal = document.getElementById('myModal');
