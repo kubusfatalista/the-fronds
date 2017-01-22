@@ -11,6 +11,7 @@ import com.fronds.dao.PhotoAlbumDao;
 import com.fronds.dao.UserDao;
 import com.fronds.dao.UserPhotoDao;
 import com.fronds.model.PhotoAlbum;
+import com.fronds.model.User;
 import com.fronds.model.UserPhoto;
 import com.fronds.service.UserPhotoService;
 
@@ -50,5 +51,10 @@ public class UserPhotoServiceImpl implements UserPhotoService {
 	@Override
 	public List<UserPhoto> getUserPhotosByAlbumId(long id) {
 		return userPhotoDao.getUserPhotosByAlbumId(id);
+	}
+	
+	@Override
+	public List<UserPhoto> getAllUserPhotos(int id) {
+		return userPhotoDao.getAllUserPhotos(id);
 	}
 }

@@ -8,4 +8,5 @@ public interface UserPhotoService {
 	public void saveUserPhoto(UserPhoto userPhoto);
 	public void saveUserPhoto(String userLogin, String savedPhotoName);
 	public List<UserPhoto> getUserPhotosByAlbumId(long id);
+	public List<UserPhoto> getAllUserPhotos(int id);
 }

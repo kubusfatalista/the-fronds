@@ -21,13 +21,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "users")
 @Access(value= AccessType.FIELD)
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="user")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE, region="user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private long userId;
+    private int userId;
     @Column
     private String login;
     @Column
@@ -47,11 +47,11 @@ public class User {
 
 	public User() { }
 
-    public long getId() {
+    public int getId() {
         return userId;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.userId = id;
     }
 

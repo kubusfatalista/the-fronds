@@ -10,6 +10,8 @@ public interface UserService {
 	User saveUser(User user);
 
 	User getUserByLogin(String login);
+	
+	User getUserById(int id);
 
 	List<User> getUserList();
 

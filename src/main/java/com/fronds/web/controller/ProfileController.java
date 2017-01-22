@@ -34,90 +34,91 @@ import com.fronds.service.UserService;
 @RequestMapping("/profile")
 public class ProfileController {
 
-    @Autowired
-    UserService userService;
-    
-    @Autowired
-    UserPhotoService userPhotoService;
-    
-    @Autowired
-    ServletContext context;
+	@Autowired
+	UserService userService;
 
-    @RequestMapping(method = GET)
-    @Secured({"ROLE_REGULAR", "ROLE_ADMIN"})
-    public String profile(Model model) {
-        if(!model.containsAttribute("user")) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String name = auth.getName(); //get logged in username
-            model.addAttribute(userService.getUserByLogin(name));
-        }
-        return "profile";
-    }
+	@Autowired
+	UserPhotoService userPhotoService;
 
-    @RequestMapping(value = "/imageDisplay", method = RequestMethod.GET)
-    @ResponseBody
-    public void displayDocument(HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName(); //get logged in username
-        byte[] img = FtpUtil.getImage(context.getRealPath("/"), userService.getUserByLogin(name).getProfilePicture());
-        response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        try {
-            response.getOutputStream().write(img);
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @RequestMapping(value = "/addPhoto", method = RequestMethod.POST)
-    public String addPhotoToAlbum(
-            @RequestPart("addedPhoto") Part profilePicture,
-            RedirectAttributes model) {
-    	
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName(); //get logged in username
-        User user = userService.getUserByLogin(name);
-        long creationDate = new Date().getTime();
-    	String addedPictureName = user.getLogin() + creationDate;
+	@Autowired
+	ServletContext context;
 
-        if(profilePicture != null) {
-            try {
-                profilePicture.write(context.getRealPath("/") + addedPictureName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        FtpUtil.saveImage(context.getRealPath("/"), addedPictureName);
-        userPhotoService.saveUserPhoto(name, addedPictureName);
-        
-        model.addFlashAttribute("user", user);
-        return "redirect:/profile/albums";
-    }
-    
-    @RequestMapping(value = "/albums", method = GET)
-    public String albums(Model model) {
-        if(!model.containsAttribute("user")) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String name = auth.getName(); //get logged in username
-            model.addAttribute(userService.getUserByLogin(name));
-        }
-        model.addAttribute(userPhotoService.getUserPhotosByAlbumId(1));
-        return "userAlbums";
-    }
-    
-    @RequestMapping(value = "/albums/imageDisplay/{imageName}", method = RequestMethod.GET)
-    @ResponseBody
-    public void showAlbumImage(@PathVariable String imageName, HttpServletResponse response) {
-        byte[] img = FtpUtil.getImage(context.getRealPath("/"), imageName);
-        response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        try {
-            response.getOutputStream().write(img);
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	@RequestMapping(method = GET)
+	@Secured({ "ROLE_REGULAR", "ROLE_ADMIN" })
+	public String profile(Model model) {
+		if (!model.containsAttribute("user")) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String name = auth.getName(); // get logged in username
+			model.addAttribute(userService.getUserByLogin(name));
+		}
+		return "profile";
+	}
+
+	@RequestMapping(value = "/imageDisplay", method = RequestMethod.GET)
+	@ResponseBody
+	public void displayDocument(HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName(); // get logged in username
+		byte[] img = FtpUtil.getImage(context.getRealPath("/"), userService.getUserByLogin(name).getProfilePicture());
+		response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+		try {
+			response.getOutputStream().write(img);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping(value = "/addPhoto", method = RequestMethod.POST)
+	public String addPhotoToAlbum(@RequestPart("addedPhoto") Part profilePicture, RedirectAttributes model) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName(); //get logged in username
+		User user = userService.getUserByLogin(name);
+
+		long creationDate = new Date().getTime();
+		String addedPictureName = user.getLogin() + creationDate;
+
+		if (profilePicture != null) {
+			try {
+				profilePicture.write(context.getRealPath("/") + addedPictureName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		FtpUtil.saveImage(context.getRealPath("/"), addedPictureName);
+		userPhotoService.saveUserPhoto(user.getLogin(), addedPictureName);
+
+		model.addFlashAttribute("user", user);
+		return "redirect:/profile/albums";
+	}
+
+	@RequestMapping(value = "/albums", method = GET)
+	public String albums(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName(); //get logged in username
+		User user = userService.getUserByLogin(name);
+		if (!model.containsAttribute("user")) {
+			 model.addAttribute(user);
+		}
+		// model.addAttribute(userPhotoService.getUserPhotosByAlbumId(2));
+		model.addAttribute(userPhotoService.getAllUserPhotos(user.getId()));
+		return "userAlbums";
+	}
+
+	@RequestMapping(value = "/albums/imageDisplay/{imageName}", method = RequestMethod.GET)
+	@ResponseBody
+	public void showAlbumImage(@PathVariable String imageName, HttpServletResponse response) {
+		byte[] img = FtpUtil.getImage(context.getRealPath("/"), imageName);
+		response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+		try {
+			response.getOutputStream().write(img);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

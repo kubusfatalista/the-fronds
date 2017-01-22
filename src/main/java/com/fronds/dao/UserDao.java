@@ -12,4 +12,5 @@ public interface UserDao {
     public User saveUser(User user);
     public User getUserByLogin(String login);
     public List<User> getUserList();
+    public User getUserById(int id);
 }
