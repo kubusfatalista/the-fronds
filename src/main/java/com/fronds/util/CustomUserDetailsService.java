@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.fronds.model.User;
+import com.fronds.domain.model.User;
 import com.fronds.service.UserService;
 
 /**
@@ -20,19 +20,19 @@ import com.fronds.service.UserService;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Override
-    public UserDetails loadUserByUsername(String s) {
-        User user = userService.getUserByLogin(s);
-        if(user != null) {
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRole().authority()));
-            org.springframework.security.core.userdetails.User details = new org.springframework.security.core.userdetails.User(
-                    user.getLogin(), user.getPassword(), authorities);            
-            return details;
-            }
-        throw new UsernameNotFoundException("No nie znaleziono takiego uzytkownika");
-        }
+	@Override
+	public UserDetails loadUserByUsername(String s) {
+		User user = userService.getUserByLogin(s);
+		if (user != null) {
+			List<GrantedAuthority> authorities = new ArrayList<>();
+			authorities.add(new SimpleGrantedAuthority(user.getRole().authority()));
+			CustomUser customUser = new CustomUser(user.getLogin(), user.getPassword(), authorities);
+			customUser.setId(user.getId());
+			return customUser;
+		}
+		throw new UsernameNotFoundException("No nie znaleziono takiego uzytkownika");
+	}
 }

@@ -8,11 +8,13 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
-import com.fronds.dao.AbstractDao;
 import com.fronds.dao.UserPhotoDao;
-import com.fronds.model.PhotoAlbum;
-import com.fronds.model.User;
-import com.fronds.model.UserPhoto;
+import com.fronds.domain.model.PhotoAlbum;
+import com.fronds.domain.model.PhotoAlbum_;
+import com.fronds.domain.model.User;
+import com.fronds.domain.model.UserPhoto;
+import com.fronds.domain.model.UserPhoto_;
+import com.fronds.domain.model.User_;
 
 @Repository("userPhotoDao")
 public class UserPhotoDaoImpl extends AbstractDao<Integer, UserPhoto> implements UserPhotoDao {
@@ -23,24 +25,24 @@ public class UserPhotoDaoImpl extends AbstractDao<Integer, UserPhoto> implements
 	}
 
 	@Override
-	public List<UserPhoto> getUserPhotosByAlbumId(long id) {
+	public List<UserPhoto> getUserPhotosByAlbumId(long albumId) {
 		CriteriaQuery<UserPhoto> criteria = getCriteriaBuilder().createQuery(UserPhoto.class);
 		Root<UserPhoto> root = criteria.from(UserPhoto.class);
 		criteria.select(root);
-		criteria.orderBy(getCriteriaBuilder().desc(root.get("creationDate")));
-		criteria.where(getCriteriaBuilder().equal(root.get("photoAlbum"), id));
+		criteria.orderBy(getCriteriaBuilder().desc(root.get(UserPhoto_.creationDate)));
+		criteria.where(getCriteriaBuilder().equal(root.get(UserPhoto_.photoAlbum), albumId));
 
 		return getSession().createQuery(criteria).getResultList();
 	}
 	
 	@Override
-	public List<UserPhoto> getAllUserPhotos(int id) {
+	public List<UserPhoto> getAllUserPhotos(int userId) {
 		CriteriaQuery<UserPhoto> criteria = getCriteriaBuilder().createQuery(UserPhoto.class);
 		Root<UserPhoto> root = criteria.from(UserPhoto.class);
-		Join<UserPhoto, PhotoAlbum> album = root.join("photoAlbum");
-		Join<PhotoAlbum, User> user = album.join("user");
+		Join<UserPhoto, PhotoAlbum> album = root.join(UserPhoto_.photoAlbum);
+		Join<PhotoAlbum, User> user = album.join(PhotoAlbum_.user);
 		
-		criteria.where(getCriteriaBuilder().equal(user.get("userId"), id));
+		criteria.where(getCriteriaBuilder().equal(user.get(User_.userId), userId));
 
 		return getSession().createQuery(criteria).getResultList();
 	}

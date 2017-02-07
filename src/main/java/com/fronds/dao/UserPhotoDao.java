@@ -2,7 +2,7 @@ package com.fronds.dao;
 
 import java.util.List;
 
-import com.fronds.model.UserPhoto;
+import com.fronds.domain.model.UserPhoto;
 
 /**
  * @author Qbek

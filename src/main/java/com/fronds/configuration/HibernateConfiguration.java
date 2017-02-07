@@ -24,7 +24,7 @@ public class HibernateConfiguration {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         
         sessionFactory.setConfigLocation(new ClassPathResource("hibernate.cfg.xml"));
-        sessionFactory.setPackagesToScan(new String[] { "com.fronds.model" });
+        sessionFactory.setPackagesToScan(new String[] { "com.fronds.domain.model" });
         return sessionFactory;
      }
      

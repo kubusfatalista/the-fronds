@@ -7,9 +7,9 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
-import com.fronds.dao.AbstractDao;
 import com.fronds.dao.UserDao;
-import com.fronds.model.User;
+import com.fronds.domain.model.User;
+import com.fronds.domain.model.User_;
 
 /**
  * Created by Qbek on 2016-12-13.
@@ -18,35 +18,27 @@ import com.fronds.model.User;
 @Repository("userDao")
 public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 	
-	public User saveUser(User user) {	
+	public void saveUser(User user) {	
 		save(user);
-		return user;
 	}
 
 	public User getUserByLogin(String login) {
 		
 		CriteriaQuery<User> criteria = getCriteriaBuilder().createQuery(User.class);
 		Root<User> root = criteria.from(User.class);
-		criteria.select(root);
-		criteria.where(getCriteriaBuilder().equal(root.get("login"), login));
+		criteria.where(getCriteriaBuilder().equal(root.get(User_.login), login));
 		
-		User user = getSession()
+		return getSession()
 				.createQuery(criteria)
-				.setCacheable(true)
-				.setCacheRegion("user")
 				.getSingleResult();
-		return user;
 	}
 
 	public List<User> getUserList() {
 
 		CriteriaQuery<User> criteria = getCriteriaBuilder().createQuery(User.class);
-		Root<User> root = criteria.from(User.class);
-		criteria.select(root);
+		criteria.from(User.class);
 
-		List<User> userList = getSession().createQuery(criteria).getResultList();
-
-		return userList;
+		return getSession().createQuery(criteria).getResultList();
 	}
 	
 	public User getUserById(int id) {

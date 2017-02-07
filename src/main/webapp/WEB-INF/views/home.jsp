@@ -4,13 +4,13 @@
 <html>
 
     <head>
-        <title>Eloszeczka</title>
+        <title>Fronds</title>
         <link rel="stylesheet"
             type="text/css"
             href="<c:url value="/resources/style.css" />" >
     </head>
     <body>
-        <h1>dziewczyna rolnika</h1>
+        <h1>Witaj w serwisie Przyjaciule!</h1>
         <a href="<s:url value="/login" />">Zaloguj<a/>
         <a href="<s:url value="/logout" />">Wyloguj</a>
         <a href="<s:url value="/register" />">Rejestracja</a>

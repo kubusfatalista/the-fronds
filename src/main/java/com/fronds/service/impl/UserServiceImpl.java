@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fronds.dao.PhotoAlbumDao;
 import com.fronds.dao.UserDao;
-import com.fronds.dao.UserPhotoDao;
-import com.fronds.model.PhotoAlbum;
-import com.fronds.model.User;
-import com.fronds.model.UserPhoto;
-import com.fronds.model.UserRole;
+import com.fronds.domain.model.PhotoAlbum;
+import com.fronds.domain.model.User;
+import com.fronds.domain.model.UserPhoto;
+import com.fronds.domain.model.UserRole;
+import com.fronds.service.PhotoAlbumService;
+import com.fronds.service.UserPhotoService;
 import com.fronds.service.UserService;
 
 @Service("userService")
@@ -26,43 +26,35 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 	
 	@Autowired
-	private PhotoAlbumDao photoAlbumDao;
+	private PhotoAlbumService photoAlbumService;
 	
 	@Autowired
-	private UserPhotoDao userPhotoDao;
-
-    /* (non-Javadoc)
-	 * @see com.fronds.service.impl.UserService#saveUser(com.fronds.model.User)
-	 */
-    @Override
-	public User saveUser(User user) {
-    	user.setProfilePicture(user.getLogin() + new Date().getTime());
-    	user.setRole(UserRole.REGULAR);
-    	user = userDao.saveUser(user);
-    	
-    	PhotoAlbum profilesPhotoAlbum = new PhotoAlbum();
-    	profilesPhotoAlbum.setAlbumName("Zdjêcia profilowe");
-    	profilesPhotoAlbum.setAlbumDescription("");
-    	profilesPhotoAlbum.setUser(user);
-    	profilesPhotoAlbum.setAlbumCreationDate(new Date().getTime());
-    	photoAlbumDao.savePhotoAlbum(profilesPhotoAlbum);
-    	
-    	UserPhoto userPhoto = new UserPhoto();
-    	userPhoto.setCreationDate(new Date().getTime());
-    	userPhoto.setImageDescription("Japa dodana przy rejestracji");
-    	userPhoto.setImageTitle("Zdjêcie profilowe");
-    	userPhoto.setImageSavedName(user.getProfilePicture());
-    	userPhoto.setPhotoAlbum(profilesPhotoAlbum);
-    	userPhotoDao.saveUserPhoto(userPhoto);
-    	
+	private UserPhotoService userPhotoService;
+	
+	@Override
+	public void createNewUser(User user) {
+		saveUser(user);
+		PhotoAlbum photoAlbum = photoAlbumService.createProfilePhotoAlbum(user);
+		UserPhoto userPhoto = userPhotoService.saveUserProfilePhoto(photoAlbum, user.getProfilePicture());
+		
     	Set<UserPhoto> userPhotos = new HashSet<>();
     	userPhotos.add(userPhoto);
-    	profilesPhotoAlbum.setUserPhotos(userPhotos);
+    	photoAlbum.setUserPhotos(userPhotos);
     	
     	Set<PhotoAlbum> photoAlbums = new HashSet<>();
-    	photoAlbums.add(profilesPhotoAlbum);
+    	photoAlbums.add(photoAlbum);
     	user.setPhotoAlbums(photoAlbums);
-    	return user;
+		
+	}
+
+    /* (non-Javadoc)
+	 * @see com.fronds.service.impl.UserService#saveUser(com.fronds.domain.model.User)
+	 */
+    @Override
+	public void saveUser(User user) {
+    	user.setProfilePicture(user.getLogin() + new Date().getTime());
+    	user.setRole(UserRole.REGULAR);
+    	userDao.saveUser(user);
     }
     /* (non-Javadoc)
 	 * @see com.fronds.service.impl.UserService#getUserByLogin(java.lang.String)

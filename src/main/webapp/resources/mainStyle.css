@@ -1,0 +1,118 @@
+@CHARSET "UTF-8";
+/* TOP NAVIGATION BAR */
+ul {
+    list-style-type: none;
+    margin: auto;
+    padding: 0;
+    background-color: #4597ba;
+	position: fixed;
+	top: 0px;
+	z-index: 1;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    font-family: 'Lobster', serif;
+    font-size: 20px;
+}
+
+li a.topButton:hover {
+	background-color: #377995;
+}
+/* LEFT MENU */
+h1.name {
+    text-align: center;
+    font-family: 'Sansita', serif;
+    font-size: 24px;
+}
+
+h1.menu {
+    text-align: center;
+    font-family: 'Sansita', serif;
+    font-size: 20px;
+}
+
+p.menu {
+	padding: 0px;
+	margin: 2px;
+}
+
+p.menu:hover {
+	cursor: pointer;
+	background-color: #f3f3f3;
+}
+
+p a {
+    color: black;
+    text-decoration: none;
+}
+/* MAIN BODY AND COLUMNS */
+
+.body-nomargins {
+	margin: 0px;
+	background: #eaeaea; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#eaeaea, white) fixed; /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#eaeaea, white) fixed; /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#eaeaea, white) fixed; /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#eaeaea, white) fixed; /* Standard syntax */
+
+}
+
+.container-width {
+	width: 1060px;
+}
+
+div.main-container {
+	background-color: red;
+	margin: auto;
+	height: 1px; /* jebne za moment */ 
+	margin-top: 50px;
+}
+
+div.left-column {
+	background-color: white;
+	position: fixed;
+    width: 244px;
+    border: 2px solid;
+	border-color: #4597ba;
+}
+
+div.center-column {
+	background-color: white;
+    width: 619px;
+    height: auto;
+    float: left;
+    min-height: 100px;
+    margin-left: 249px;
+	border: 2px solid;
+	border-color: #4597ba;
+}
+
+div.right-column {
+	background-color: white;
+    position: fixed;
+    width: 184px;
+    height: 240px;
+    margin-left: 873px;
+    border: 2px solid;
+	border-color: #4597ba;
+}
+
+div.nav-container {
+	possition:relative;
+	padding: 0px;
+	margin:auto;
+}
+
+img.profilePhoto {
+	display: block;
+	border: 3px solid black;
+	margin: 20px;
+}

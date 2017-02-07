@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
+<link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Lobster">
+<meta charset="UTF-8">
+<title>Przyjaciule</title>
+<style>
+
+.body-nomargins {
+	margin: 0px
+}
+
+.container-width {
+	width: 1060px;
+}
+
+ul {
+    list-style-type: none;
+    margin: auto;
+    padding: 0;
+    background-color: #333;
+	position: fixed;
+	top: 0px;
+	z-index: 1;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    font-family: 'Lobster', serif;
+    font-size: 20px;
+}
+
+li a.topButton:hover {
+	background-color: #610561;
+}
+
+div.main-container {
+	margin:auto;
+	margin-top: 50px;
+	background-color: #ffe6b3;
+	height: 100%;
+	min-height: 900px;
+}
+
+div.left-column {
+	background-color: #95DEE3;
+	float: left;
+	position: relative;
+    width: 285px;
+    height: 400px;
+    margin-right: 2px;
+}
+
+div.center-column {
+	background-color: #F2552C;
+	float: left;
+    width: 580px;
+    height: 500px;
+    margin-left: 3px;
+    margin-right: 2px;
+}
+
+div.right-column {
+	background-color: #25AEE3;
+    float: left;
+    position: relative;
+    width: 185px;
+    height: 240px;
+    margin-left: 3px;
+}
+
+div.nav-container {
+	possition:relative;
+	padding: 0px;
+	margin:auto; //centers
+}
+
+img.profilePhoto {
+	display: block;
+	border: 3px solid black;
+	margin: auto;
+}
+
+</style>
+</head>
+<body class="body-nomargins">
+
+<div id="nav-container" class="nav-container container-width">
+	<ul id="navBar" class="container-width">
+		<li style="float: left"><a href="#about">Przyjaciule</a></li>
+		<li style="float: left"><a href="#about">Todo szukajka</a></li>
+		<li><a class="topButton" href="#about">Ustawienia</a></li>
+		<li><a class="topButton" href="#about">Powiadomienia</a></li>
+		<li><a class="topButton" href="#about">Wiadomości</a></li>
+		<li><a class="topButton" href="#contact">Zaproszenia</a></li>
+		<li><a class="topButton" href="#news">Wall</a></li>
+		<li><a class="topButton" href="#home">Mój profil</a></li>
+	</ul>
+</div>
+
+<div class="main-container container-width">
+
+	<div class="left-column">
+		<div >
+			<img class="profilePhoto" alt="Mieszko" 
+			src="file:///C:/mieszkoM.jpg" />
+		</div>
+	</div>
+	
+	<div class="center-column">
+	
+	</div>
+	
+	<div class="right-column">
+	
+	</div>
+
+</div>
+
+</body>
+<script>
+
+	var targetLeft  = 0;
+	var targetTop = 0;
+	var $navBar = $('#navBar');
+	var $navContainer =$('#nav-container');
+	var $leftColumn = $('.left-column');
+	var $rightColumn = $('.right-column');
+	$(window).scroll(function() {
+		if($navContainer.css('margin-left') == '0px') {
+	   	var left = $(window).scrollLeft();
+	   	var adj = targetLeft - left;
+	   	$navBar.css({left: adj});
+		}
+        clearTimeout($.data(this, 'scrollTimer'));
+        $.data(this, 'scrollTimer', setTimeout(function() {
+            var top = $(window).scrollTop();
+            var adj = targetTop + top;
+            $leftColumn.animate({top: adj}, "ease-Out");
+            $rightColumn.animate({top: adj}, "ease-Out");
+        }, 150));
+	});
+
+
+	$(window).resize(function() {
+		if($navContainer.css('margin-left') != '0px') {
+	        $navBar.css({left: 'auto'});
+		}
+ 	});
+
+</script>
+</html>

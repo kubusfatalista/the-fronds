@@ -2,16 +2,17 @@ package com.fronds.service;
 
 import java.util.List;
 
-import com.fronds.model.PhotoAlbum;
-import com.fronds.model.User;
+import com.fronds.domain.model.User;
 
 public interface UserService {
 
-	User saveUser(User user);
-
-	User getUserByLogin(String login);
+	void saveUser(User user);
 	
-	User getUserById(int id);
+	void createNewUser(User user);
+
+	User getUserByLogin(String userLogin);
+	
+	User getUserById(int userId);
 
 	List<User> getUserList();
 

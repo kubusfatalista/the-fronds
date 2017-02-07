@@ -1,49 +1,69 @@
 package com.fronds.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fronds.dao.PhotoAlbumDao;
-import com.fronds.dao.UserDao;
 import com.fronds.dao.UserPhotoDao;
-import com.fronds.model.PhotoAlbum;
-import com.fronds.model.User;
-import com.fronds.model.UserPhoto;
+import com.fronds.domain.model.PhotoAlbum;
+import com.fronds.domain.model.UserPhoto;
 import com.fronds.service.UserPhotoService;
+import com.fronds.service.UserService;
 
 @Service("userPhotoService")
 @Transactional
 public class UserPhotoServiceImpl implements UserPhotoService {
 	
 	@Autowired
-	private UserDao userDao;
-	
-	@Autowired
 	private UserPhotoDao userPhotoDao;
 	
 	@Autowired
-	private PhotoAlbumDao photoAlbumDao;
-
+	private UserService userService;
+	
 	@Override
 	public void saveUserPhoto(UserPhoto userPhoto) {
 		userPhotoDao.saveUserPhoto(userPhoto);
 	}
 	
 	@Override
-	public void saveUserPhoto(String userLogin, String savedPhotoName) {
-		PhotoAlbum currentAlbum = null;
-        for(PhotoAlbum album : userDao.getUserByLogin(userLogin).getPhotoAlbums())
-        	currentAlbum = album;
-
+	public void saveUserPhoto(PhotoAlbum album, String savedPhotoName) {
         UserPhoto userPhoto = new UserPhoto();
-        userPhoto.setCreationDate(new Date().getTime());
         userPhoto.setImageDescription("none");
         userPhoto.setImageSavedName(savedPhotoName);
         userPhoto.setImageTitle("test");
+        userPhoto.setLongitude(-1);
+        userPhoto.setLatitude(-1);
+        userPhoto.setPhotoAlbum(album);
+        saveUserPhoto(userPhoto);
+	}
+	
+	@Override
+	public UserPhoto saveUserProfilePhoto(PhotoAlbum album, String savedPhotoName) {
+    	UserPhoto userPhoto = new UserPhoto();
+    	userPhoto.setImageDescription("Japa dodana przy rejestracji");
+    	userPhoto.setImageTitle("Zdjêcie profilowe");
+    	userPhoto.setImageSavedName(savedPhotoName);
+    	userPhoto.setPhotoAlbum(album);
+        userPhoto.setLongitude(-1);
+        userPhoto.setLatitude(-1);
+    	userPhotoDao.saveUserPhoto(userPhoto);
+    	return userPhoto;
+	}
+	
+	@Override
+	public void saveUserPhoto(int userId, String savedPhotoName) {
+		PhotoAlbum currentAlbum = null;
+        for(PhotoAlbum album : userService.getUserById(userId).getPhotoAlbums())
+        	currentAlbum = album;
+
+        UserPhoto userPhoto = new UserPhoto();
+        userPhoto.setImageDescription("none");
+        userPhoto.setImageSavedName(savedPhotoName);
+        userPhoto.setImageTitle("test");
+        userPhoto.setLongitude(-1);
+        userPhoto.setLatitude(-1);
         userPhoto.setPhotoAlbum(currentAlbum);
         saveUserPhoto(userPhoto);
 	}
