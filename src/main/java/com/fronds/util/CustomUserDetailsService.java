@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			List<GrantedAuthority> authorities = new ArrayList<>();
 			authorities.add(new SimpleGrantedAuthority(user.getRole().authority()));
 			CustomUser customUser = new CustomUser(user.getLogin(), user.getPassword(), authorities);
-			customUser.setId(user.getId());
+			customUser.setId(user.getUserId());
 			return customUser;
 		}
 		throw new UsernameNotFoundException("No nie znaleziono takiego uzytkownika");

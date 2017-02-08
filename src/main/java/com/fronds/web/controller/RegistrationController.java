@@ -74,7 +74,7 @@ public class RegistrationController {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().authority()));
         CustomUser customUser = new CustomUser(user.getLogin(), user.getPassword(), authorities);
-		customUser.setId(user.getId());
+		customUser.setId(user.getUserId());
         Authentication authentication =  new UsernamePasswordAuthenticationToken(customUser, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         model.addFlashAttribute("user", user);

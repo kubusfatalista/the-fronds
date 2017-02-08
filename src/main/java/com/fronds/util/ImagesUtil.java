@@ -6,10 +6,24 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 public class ImagesUtil {
 
 	private ImagesUtil() {
+	}
+	
+	public static void writeImageToResponse(byte[] img, HttpServletResponse response, Logger logger) {
+		response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+		try {
+			response.getOutputStream().write(img);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		} catch (IOException e) {
+			logger.error(e);
+		}
 	}
 
 	public static void saveThumbnails(String originalPath, String resultPath, boolean profile) throws IOException {

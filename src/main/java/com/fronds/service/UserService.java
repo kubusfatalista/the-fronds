@@ -3,6 +3,7 @@ package com.fronds.service;
 import java.util.List;
 
 import com.fronds.domain.model.User;
+import com.fronds.dto.FrondDto;
 
 public interface UserService {
 
@@ -15,5 +16,7 @@ public interface UserService {
 	User getUserById(int userId);
 
 	List<User> getUserList();
+	
+	List<FrondDto> getAllUsersWithFrondsStatusesList(int userId);
 
 }

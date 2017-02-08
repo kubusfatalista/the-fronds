@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	przyszly profil
+	hehe
 </body>
 </html>

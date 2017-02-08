@@ -70,7 +70,7 @@ p a {
 }
 
 div.main-container {
-	background-color: red;
+	background-color: #ededed;
 	margin: auto;
 	height: 1px; /* jebne za moment */ 
 	margin-top: 50px;

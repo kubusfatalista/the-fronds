@@ -1,13 +1,11 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
-<link rel="stylesheet" type="text/css" href="resources/mainStyle.css">
-<link rel="icon" href="resources/images/moose_front.png">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css">
+<link rel="icon" href="../../resources/images/moose_front.png">
 <meta charset="UTF-8">
 <title>Wszyscy zarejestrowani Przyjaciule</title>
 <style>
@@ -64,31 +62,15 @@ h4 {
 	<div class="main-container container-width">
 		Łośmiel się zalozyc u nas konto!
 		<div class="one-big-column">
-			<c:forEach items="${frondDtoList}" var="frond">
+			<c:forEach items="${userPhotoList}" var="user">
 				<div class="card">
-				  <img src="allUsers/imageDisplay/${frond.user.profilePicture}m" alt="Avatar">
+				  <img src="C:/mieszkoM.jpg" alt="Avatar">
 				  <div class="container">
-				    <h4><b>${frond.user.firstName} ${frond.user.lastName}</b></h4> 
-				    <form method="GET" action="allUsers/sendFriendInvitation/${frond.user.userId}"
+				    <h4><b>John Doe</b></h4> 
+				    <form method="GET" action="myProfile/sendFriendInvitation/${user.userId}"
 						enctype="text/plain">
-	<!-- W user.userId 'userId' jest nazwa gettera, a nie pola! Jak pole bedzie userId, a getter getId(), to nie zadziala  -->
-						<c:choose>
-						    <c:when test="${frond.status=='ToTy'}">
-						        <input type="submit" value="To ty" />
-						    </c:when>
-							<c:when test="${frond.status=='Przyjaciul'}">
-						        <input type="submit" value="Przyjaciul" />
-						    </c:when>
-							<c:when test="${frond.status=='Nieznajomy'}">
-						        <input type="submit" value="Wyślij zaproszenie" />
-						    </c:when>
-						    <c:when test="${frond.status=='Wyslano'}">
-						        <input type="submit" value="Wysłano zaproszenie" />
-						    </c:when>
-						 	<c:when test="${frond.status=='Oczekuje'}">
-						        <input type="submit" value="Zaakceptuj Przyjaciula" />
-						    </c:when>
-						</c:choose>
+						<input type="text" name="friendId" /> <br /> <input type="submit"
+							value="Wyslij zaproszenie" />
 					</form>
 				  </div>
 				</div>

@@ -1,6 +1,8 @@
 package com.fronds.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +24,9 @@ public class RelationshipServiceImpl implements RelationshipService {
 	public void sendFriendRequest(int userId, int friendId) {
 		Relationship relationship = new Relationship();
 		User user = new User();
-		user.setId(userId);
+		user.setUserId(userId);
 		User friend = new User();
-		friend.setId(friendId);
+		friend.setUserId(friendId);
 		relationship.setUser(user);
 		relationship.setFriend(friend);
 		relationship.setRelationshipStatus(RelationshipStatus.INVITATION_SENT);
@@ -44,6 +46,20 @@ public class RelationshipServiceImpl implements RelationshipService {
 	@Override
 	public List<Relationship> getMyFriends(int userId) {
 		return relationshipDao.getMyFriends(userId);
+	}
+	
+	@Override
+	public Map<Integer, Relationship> getMyFriendsMap(int userId) {
+		List<Relationship> list = relationshipDao.getMyFriends(userId);
+		Map<Integer, Relationship> map = new HashMap<>();
+		for(Relationship rel : list) {
+			if(rel.getUser().getUserId() == userId) {
+				map.put(rel.getFriend().getUserId(), rel);
+			} else if(rel.getFriend().getUserId() == userId) {
+				map.put(rel.getUser().getUserId(), rel);
+			}
+		}
+		return map;
 	}
 
 	@Override

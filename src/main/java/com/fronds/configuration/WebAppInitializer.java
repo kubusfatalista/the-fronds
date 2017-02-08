@@ -28,6 +28,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         registration.setMultipartConfig(new MultipartConfigElement("/", // gdzie sie zapisuja pliki tempowo, ale co deploy sie wywala
                 2097152, 4194304, 0));
+        registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
     }
 
 }

@@ -27,6 +27,7 @@ import com.fronds.service.UserPhotoService;
 import com.fronds.service.UserService;
 import com.fronds.util.Attributes;
 import com.fronds.util.FileRepository;
+import com.fronds.util.ImagesUtil;
 
 /**
  * Created by Qbek on 2016-12-15.
@@ -69,37 +70,17 @@ public class MyProfileController {
 	@RequestMapping(value = "/imageDisplay", method = RequestMethod.GET)
 	@ResponseBody
 	public void displayDocument(HttpServletResponse response, HttpSession session) {
-		byte[] img = fileRepository
+		byte[] imgData = fileRepository
 				.getImage(userService.getUserById((int) session.getAttribute(Attributes.USER_ID)).getProfilePicture()+"m");
-		response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-		try {
-			response.getOutputStream().write(img);
-			response.getOutputStream().flush();
-			response.getOutputStream().close();
-		} catch (IOException e) {
-			logger.error(e);
-		}
+		ImagesUtil.writeImageToResponse(imgData, response, logger);
 	}
 	
 	@RequestMapping(value = "/miniatureDisplay", method = RequestMethod.GET)
 	@ResponseBody
 	public void displayMiniature(HttpServletResponse response, HttpSession session) {
-		byte[] img = fileRepository
+		byte[] imgData = fileRepository
 				.getImage(userService.getUserById((int) session.getAttribute(Attributes.USER_ID)).getProfilePicture()+"xs");
-		response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-		try {
-			response.getOutputStream().write(img);
-			response.getOutputStream().flush();
-			response.getOutputStream().close();
-		} catch (IOException e) {
-			logger.error(e);
-		}
-	}
-	
-	@RequestMapping(value = "/sendFriendInvitation", method = RequestMethod.GET)
-	public String sendFriendInvitation(@RequestParam("friendId") int friendId, HttpSession session) {
-		relationshipService.sendFriendRequest((int) session.getAttribute(Attributes.USER_ID), friendId);
-		return "redirect:/myProfile";
+		ImagesUtil.writeImageToResponse(imgData, response, logger);
 	}
 	
 	@RequestMapping(value = "/createTimeMooseStatus", method = RequestMethod.GET)
