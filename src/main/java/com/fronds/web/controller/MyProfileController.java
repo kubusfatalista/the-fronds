@@ -2,6 +2,7 @@ package com.fronds.web.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fronds.domain.model.Relationship;
 import com.fronds.service.RelationshipService;
 import com.fronds.service.TimeMooseStatusService;
 import com.fronds.service.UserPhotoService;
@@ -64,6 +67,9 @@ public class MyProfileController {
 			model.addAttribute(userService.getUserById((int) session.getAttribute(Attributes.USER_ID)));
 		}
 		model.addAttribute(timeMooseStatusService.getTimeMooseStatusesForUserId((int) session.getAttribute(Attributes.USER_ID)));
+		List<Relationship> newInvitations = relationshipService.getMyInvitations((int) session.getAttribute(Attributes.USER_ID));
+		model.addAttribute(newInvitations);
+		model.addAttribute("newInvitations", newInvitations.size());
 		return "myProfile";
 	}
 
@@ -81,6 +87,23 @@ public class MyProfileController {
 		byte[] imgData = fileRepository
 				.getImage(userService.getUserById((int) session.getAttribute(Attributes.USER_ID)).getProfilePicture()+"xs");
 		ImagesUtil.writeImageToResponse(imgData, response, logger);
+	}
+	
+	@RequestMapping(value = "/miniatureInInv/{imageName}", method = RequestMethod.GET)
+	@ResponseBody
+	public void displayMiniatureInInvitation(@PathVariable String imageName, HttpServletResponse response, HttpSession session) {
+		byte[] imgData = fileRepository.getImage(imageName);
+		ImagesUtil.writeImageToResponse(imgData, response, logger);
+	}
+	
+	@RequestMapping(value = "/invitationAccepted/{relationshipId}", method = RequestMethod.GET)
+	public void invitationAccepted(@PathVariable int relationshipId, HttpServletResponse response, HttpSession session) {
+		System.out.println("############################################################" + relationshipId);
+	}
+	
+	@RequestMapping(value = "/invitationDeclined/{relationshipId}", method = RequestMethod.GET)
+	public void invitationDeclined(@PathVariable int relationshipId, HttpServletResponse response, HttpSession session) {
+		System.out.println("############################################################" + relationshipId);
 	}
 	
 	@RequestMapping(value = "/createTimeMooseStatus", method = RequestMethod.GET)

@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
 <link rel="stylesheet" type="text/css" href="resources/mainStyle.css">
+<link rel="stylesheet" href="resources/font-awesome/css/font-awesome.min.css">
 <link rel="icon" href="resources/images/moose_front.png">
 <meta charset="UTF-8">
 <title>Przyjaciule - Twój profil</title>
@@ -109,6 +110,94 @@ div.time-moose-status-content {
 	font-size: 18px;
 }
 
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 360px;
+    overflow: auto;
+    max-height: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.show {display:block;}
+
+div.invitation-counter {
+	font-family: Sansita;
+	font-size: 11px;
+	color: white;
+	text-align: center;
+	height: 15px;
+	width: 15px;
+	background-color: red;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	border-radius: 50%;
+}
+
+div.new-invitation {
+	display: flex;
+	position: relative;
+	padding: 3px;
+	border: 1px solid #9ad3de;
+	border-radius: 5px;
+	margin-top: 2px;
+	max-height: 50px;
+}
+
+.new-invitation p {
+	font-family: Sansita;
+	font-size: 18px;
+	margin-top: auto;
+	margin-left: 5px;
+	padding: 0px;
+	word-wrap: break-word;
+	max-width: 200px;
+}
+
+.new-invitation img {
+	display: block;
+	border-radius: 5px;
+	width: 50px;
+	height: 50px;
+}
+
+.checkIcon {
+	position: absolute;
+	color: #a9a9a9;	
+	cursor: pointer;
+	transition-duration: 0.3s;
+	display: block;
+	height: 30px;
+	width: 30px;
+	top: 10px;
+	right: 50px;
+}
+
+.crossIcon {
+	position: absolute;
+	color: #a9a9a9;	
+	cursor: pointer;
+	transition-duration: 0.3s;
+	display: block;
+	height: 30px;
+	width: 30px;
+	top: 10px;
+	right: 10px;
+}
+
+.checkIcon:hover {
+	color: lightgreen;
+}
+
+.crossIcon:hover {
+	color: tomato;
+}
+
 </style>
 
 </head>
@@ -121,7 +210,23 @@ div.time-moose-status-content {
 			<li><a class="topButton" href="#about">Ustawienia</a></li>
 			<li><a class="topButton" href="#about">Powiadomienia</a></li>
 			<li><a class="topButton" href="#about">Wiadomości</a></li>
-			<li><a class="topButton" href="#contact">Zaproszenia</a></li>
+			<li><a id="new-invitations-button" onclick="frondInvitationDropDown()" class="topButton">Zaproszenia</a>
+				<div class="invitation-counter">
+				${newInvitations}
+				</div>
+				<div id="myDropdown" class="dropdown-content">
+					<c:forEach items="${relationshipList}" var="invite">
+						<div class="new-invitation">
+							<img alt="${invite.user.firstName}" src="myProfile/miniatureInInv/${invite.user.profilePicture}xs">
+							<p>${invite.user.firstName} ${invite.user.lastName}</p>
+							<i id="declineId${invite.relationshipId}" onclick="invitationDecline(${invite.relationshipId})" 
+								class="fa fa-times-circle-o  fa-2x crossIcon" aria-hidden="true"></i>
+							<i id="acceptId${invite.relationshipId}" onclick="invitationAccept(${invite.relationshipId})" 
+								class="fa fa-check-circle-o fa-2x checkIcon" aria-hidden="true"></i>
+						</div>
+					</c:forEach>
+				</div>
+			</li>
 			<li><a class="topButton" href="#news">Wall</a></li>
 			<li><a class="topButton" href="#home">Mój profil</a></li>
 		</ul>
@@ -205,6 +310,44 @@ div.time-moose-status-content {
 	document.getElementById("feed-the-moose-div").addEventListener("click", function () {
 	  form.submit();
 	});
+
+	function invitationAccept(relationshipId) {
+		$.get("myProfile/invitationAccepted/"+relationshipId);
+		//$(event.target).css({display : 'none'});
+		$('#acceptId'+relationshipId).css({display : 'none'});
+		$('#declineId'+relationshipId).css({display : 'none'});
+		
+	}
+
+	function invitationDecline(relationshipId) {
+		$.get("myProfile/invitationDeclined/"+relationshipId);
+		$('#acceptId'+relationshipId).css({display : 'none'});
+		$('#declineId'+relationshipId).css({display : 'none'});
+	}
+
+	
+	function frondInvitationDropDown() {
+	    document.getElementById("myDropdown").classList.toggle("show");
+	}
+
+	$(window).click(function() {
+		
+		if (!$(event.target).is('#new-invitations-button')) {
+			// hehe
+			var parts = '.dropdown-content div, .checkIcon, .crossIcon, .new-invitation p, .new-invitation img, .dropdown-content';
+			if (!($(event.target).is(parts))) {
+			    var dropdowns = document.getElementsByClassName("dropdown-content");
+			    var i;
+			    for (i = 0; i < dropdowns.length; i++) {
+			      var openDropdown = dropdowns[i];
+			      if (openDropdown.classList.contains('show')) {
+			        openDropdown.classList.remove('show');
+			      }
+			    }
+			}
+		  }
+	});
+	
  	/* 
  	podjebane kolory - dwa szare, dwa morsko-niebieskie
  	

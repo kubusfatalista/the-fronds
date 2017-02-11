@@ -20,17 +20,11 @@ public class RelationshipServiceImpl implements RelationshipService {
 	
 	@Autowired
 	RelationshipDao relationshipDao;
+
 	
-	public void sendFriendRequest(int userId, int friendId) {
-		Relationship relationship = new Relationship();
-		User user = new User();
-		user.setUserId(userId);
-		User friend = new User();
-		friend.setUserId(friendId);
-		relationship.setUser(user);
-		relationship.setFriend(friend);
-		relationship.setRelationshipStatus(RelationshipStatus.INVITATION_SENT);
-		relationshipDao.saveRelationship(relationship);
+	@Override
+	public void getRelationshipById(int relationshipId) {
+		relationshipDao.getRelationshipById(relationshipId);
 	}
 
 	@Override
@@ -46,6 +40,19 @@ public class RelationshipServiceImpl implements RelationshipService {
 	@Override
 	public List<Relationship> getMyFriends(int userId) {
 		return relationshipDao.getMyFriends(userId);
+	}
+	
+	@Override
+	public void sendFriendRequest(int userId, int friendId) {
+		Relationship relationship = new Relationship();
+		User user = new User();
+		user.setUserId(userId);
+		User friend = new User();
+		friend.setUserId(friendId);
+		relationship.setUser(user);
+		relationship.setFriend(friend);
+		relationship.setRelationshipStatus(RelationshipStatus.INVITATION_SENT);
+		relationshipDao.saveRelationship(relationship);
 	}
 	
 	@Override
@@ -66,5 +73,17 @@ public class RelationshipServiceImpl implements RelationshipService {
 	public List<Relationship> getMyInvitations(int userId) {
 		return relationshipDao.getMyInvitations(userId);
 	}
-
+	
+	@Override
+	public void acceptInvitation(int relationshipId) {
+		Relationship relationship = relationshipDao.getRelationshipById(relationshipId);
+		relationship.setRelationshipStatus(RelationshipStatus.FRONDS);
+		
+	}
+	
+	@Override
+	public void declineInvitation(int relationshipId) {
+		Relationship relationship = relationshipDao.getRelationshipById(relationshipId);
+		relationship.setRelationshipStatus(RelationshipStatus.BLOCKED);
+	}
 }
