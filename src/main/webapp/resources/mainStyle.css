@@ -11,6 +11,7 @@ ul {
 }
 
 li {
+	display: flex;
     float: right;
     position: relative;
 }
@@ -26,9 +27,109 @@ li a {
     cursor: pointer;
 }
 
-li a.topButton:hover {
+li a:hover {
 	background-color: #377995;
 }
+
+.myAvatarOnNav {
+	display: block;
+	width: 48px;
+	height: 48px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+	
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 360px;
+    overflow: auto;
+    max-height: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    top: 50px;
+    z-index: 1;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.show {display:block;}
+
+div.invitation-counter {
+	display: none;
+	font-family: Sansita;
+	font-size: 11px;
+	color: white;
+	text-align: center;
+	height: 15px;
+	width: 15px;
+	background-color: red;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	border-radius: 50%;
+}
+
+div.new-invitation {
+	display: flex;
+	position: relative;
+	padding: 3px;
+	border: 1px solid #9ad3de;
+	border-radius: 5px;
+	margin-top: 2px;
+	max-height: 50px;
+}
+
+.new-invitation p {
+	font-family: Sansita;
+	font-size: 18px;
+	margin-top: auto;
+	margin-left: 5px;
+	padding: 0px;
+	word-wrap: break-word;
+	max-width: 200px;
+}
+
+.new-invitation img {
+	display: block;
+	border-radius: 5px;
+	width: 50px;
+	height: 50px;
+}
+
+.checkIcon {
+	position: absolute;
+	color: #a9a9a9;	
+	cursor: pointer;
+	transition-duration: 0.3s;
+	display: block;
+	height: 30px;
+	width: 30px;
+	top: 10px;
+	right: 50px;
+}
+
+.crossIcon {
+	position: absolute;
+	color: #a9a9a9;	
+	cursor: pointer;
+	transition-duration: 0.3s;
+	display: block;
+	height: 30px;
+	width: 30px;
+	top: 10px;
+	right: 10px;
+}
+
+.checkIcon:hover {
+	color: lightgreen;
+}
+
+.crossIcon:hover {
+	color: tomato;
+}
+
+
 /* LEFT MENU */
 h1.name {
     text-align: center;
@@ -56,6 +157,7 @@ p a {
     color: black;
     text-decoration: none;
 }
+
 /* MAIN BODY AND COLUMNS */
 
 .body-nomargins {

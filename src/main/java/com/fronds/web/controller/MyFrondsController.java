@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.fronds.service.TimeMooseStatusService;
+import com.fronds.domain.model.User;
+import com.fronds.service.RelationshipService;
+import com.fronds.service.UserService;
 import com.fronds.util.Attributes;
 import com.fronds.util.FileRepository;
 
@@ -20,15 +22,22 @@ import com.fronds.util.FileRepository;
 public class MyFrondsController {
 	
 	@Autowired
-	TimeMooseStatusService timeMooseStatusService;
+	RelationshipService relationshipService;
+	
+	@Autowired
+	UserService userService;
 
 	@Autowired
 	@Qualifier("localFileRepository")
 	FileRepository fileRepository;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String myProfile(Model model, HttpSession session) {
-		model.addAttribute(timeMooseStatusService.getTimeMooseStatusesForUserId((int) session.getAttribute(Attributes.USER_ID)));
+	public String myFronds(Model model, HttpSession session) {
+		User user = userService.getUserById((int) session.getAttribute(Attributes.USER_ID));
+		if (!model.containsAttribute("user")) {
+			model.addAttribute(user);
+		}
+		model.addAttribute(relationshipService.getMyFronds((int) session.getAttribute(Attributes.USER_ID)));
 		return "myFronds";
 	}
 

@@ -31,7 +31,7 @@ public class RelationshipDaoImpl extends AbstractDao<Integer, Relationship> impl
 	}
 
 	@Override
-	public List<Relationship> getMyFriends(int userId) {
+	public List<Relationship> getMyRelationships(int userId) {
 		CriteriaQuery<Relationship> criteria = getCriteriaBuilder().createQuery(Relationship.class);
 		Root<Relationship> root = criteria.from(Relationship.class);
 		criteria.where(getCriteriaBuilder().or(
@@ -47,9 +47,34 @@ public class RelationshipDaoImpl extends AbstractDao<Integer, Relationship> impl
 		Root<Relationship> root = criteria.from(Relationship.class);
 		criteria.where(getCriteriaBuilder().and(
 				getCriteriaBuilder().equal(root.get(Relationship_.friend), userId),
-				getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.INVITATION_SENT)));
+				getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.INVITATION_SENT)
+				));
 		
 		return getSession().createQuery(criteria).getResultList();
 	}
-
+	
+	@Override
+	public List<Relationship> getMyFronds(int userId) {
+		CriteriaQuery<Relationship> criteria = getCriteriaBuilder().createQuery(Relationship.class);
+		Root<Relationship> root = criteria.from(Relationship.class);
+		criteria.where(getCriteriaBuilder().and(
+							getCriteriaBuilder().or(getCriteriaBuilder().equal(root.get(Relationship_.user), userId),
+													getCriteriaBuilder().equal(root.get(Relationship_.friend), userId)),
+							getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.FRONDS)
+				));
+		
+		return getSession().createQuery(criteria).getResultList();
+	}
+	
+	@Override
+	public Long getMyInvitationsCount(int userId) {
+		CriteriaQuery<Long> criteria = getCriteriaBuilder().createQuery(Long.class);
+		Root<Relationship> root = criteria.from(Relationship.class);
+		criteria.multiselect(getCriteriaBuilder().count(root));
+		criteria.where(getCriteriaBuilder().and(
+				getCriteriaBuilder().equal(root.get(Relationship_.friend), userId),
+				getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.INVITATION_SENT)));
+		
+		return getSession().createQuery(criteria).getSingleResult();
+	}
 }

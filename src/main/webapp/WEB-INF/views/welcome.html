@@ -1,19 +1,32 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
-<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css" th:href="@{/resources/mainStyle.css}">
+<link rel="stylesheet" href="../../resources/font-awesome/css/font-awesome.min.css" th:href="@{/resources/font-awesome/css/font-awesome.min.css}">
+<link rel="icon" href="../../resources/images/moose_front.png" th:href="@{/resources/images/moose_front.png}">
 <meta charset="UTF-8">
-<title>Przyjaciule</title>
+<head>
+<title>Przyjaciule - Twój profil</title>
+
 <style>
 
-.login-box {
+div.one-big-column {
 	margin: auto;
 	margin-top: 50px;
+	display: flex;
+	background-color: white;
+    width: 1037px;
+    height: auto;
+    min-height: 100px;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.login-box {
+	margin: 50px;
+	margin-top: 100px;
 	background-color: white;
 	border-radius: 15px;
 	border-color: #4597ba;
@@ -25,6 +38,17 @@
 
 }
 
+.register-box {
+	margin: 50px;
+	background-color: white;
+	border-radius: 15px;
+	border-color: #4597ba;
+	border-style: solid;
+	border-width: 5px;
+	width: 400px;
+	padding: 10px;
+}
+
 p {
 	font-size: 16px;
 	font-family: Sansita;
@@ -33,10 +57,11 @@ p {
 }
 
 input[type=text], input[type=password] {
+	font-family: Sansita;
 	border-radius: 5px;
 	width: 300px;
 	height: 30px;
-	font-size: 16px;
+	font-size: 18px;
 	margin: 10px;
 }
 
@@ -50,17 +75,45 @@ input[type=submit] {
 	float: right;
 }
 
-h1 {
+#profilePictureInput {
+	cursor: pointer;
+}
+
+h1.login {
 	float: left;
 	font-family:Lobster;
 	margin-left: 90px
 }
 
-image {
+h1.register {
+	position: relative;
+	right: 40px;
+	float: right;
+	font-family:Lobster;
+	margin-left: 90px
+}
+
+img.los {
 	position: relative;
 	left: 40px;
 	bottom: 10px;
+	width: 100px;
+	height: 100px;
 }
+
+img.los2 {
+	position: relative;
+	bottom: 10px;
+	width: 100px;
+	height: 100px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
 
 div.error-div {
 	background-color:red;
@@ -70,25 +123,70 @@ div.error-div {
 	display:none;
 	
 }
-
 </style>
+
 </head>
 <body class="body-nomargins">
-
-	<div class="login-box">
-		<h1> Zaloguj się </h1>
-		<image src="../../resources/images/los_przebiega.png" width=100 height=100/>
-		<form method="POST" action="login" enctype="text/plain">
-			<p>Login</p>
-			<input type="text" name="login" />
-			
-			<input type="password" name="password" />
-			<p>Hasło</p>
-			<div class="error-div"> </div>
-			<input type="submit" value="Zaloguj się" />
-		</form>
-		
+	<div class="one-big-column">
+		<div class="login-box">
+			<h1 class="login"> Zaloguj się </h1>
+			<img class = "los" src="../../resources/images/los_przebiega.png"
+				th:src="@{/resources/images/los_przebiega.png}"/>
+			<form method="POST" th:action="@{/login}" accept-charset="UTF-8">
+				<p>Login</p>
+				<input id="loginInput" type="text" name="login" />
+				<p>Hasło</p>
+				<input type="password" name="password" />
+				<input type="submit" value="Zaloguj się" />
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			</form>		
+		</div>
+		<div class="register-box">
+			<img class = "los2" src="../../resources/images/los_przebiega.png"
+				th:src="@{/resources/images/los_przebiega.png}"/>
+			<h1 class="register"> Zarejestruj się </h1>
+			<form method="POST" th:action="@{/register}" enctype="multipart/form-data" accept-charset="UTF-8">
+				<p>Imię</p>
+				<input type="text" name="firstName" />
+				<p>Nazwisko</p>
+				<input type="text" name="lastName" />
+				<p>Login</p>
+				<input type="text" name="login" />
+				<p>Hasło</p>
+				<input type="password" name="password" />
+				<input id="openFileDialog" type="file" name="profilePicture" accept="image/jpeg,image/png,image/gif" style="display:none" />
+				<p>Japa</p>
+				<input id="profilePictureInput" type="text" value="Kliknij by wybrać" readonly/>
+				<input type="submit" value="Zarejestruj się" />
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			</form>	
+		</div>
 	</div>
-
 </body>
+
+<script>
+
+	$("#profilePictureInput").click(function() {
+		$("#openFileDialog").click();
+	});
+	
+	$("#openFileDialog").on('change',function(){
+		var filename = $("#openFileDialog").val().replace(/.*(\/|\\)/, '');
+		$("#profilePictureInput").val(filename);
+	});
+
+	$(document).ready(function() {
+		$("#loginInput").focus();
+	});
+
+ 	/* 
+ 	podjebane kolory - dwa szare, dwa morsko-niebieskie
+ 	
+		#c9c9c9
+		#e3e3e3
+		#9ad3de
+		#89bdd3
+ 	*/
+
+</script>
 </html>

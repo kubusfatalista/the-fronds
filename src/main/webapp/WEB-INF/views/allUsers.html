@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css" th:href="@{resources/mainStyle.css}">
+<link rel="icon" href="../../resources/images/moose_front.png" th:href="@{/resources/images/moose_front.png}">
+<meta charset="UTF-8">
+<head>
+<title>Wszyscy zarejestrowani Przyjaciule</title>
+<style>
+
+div.one-big-column {
+	display: flex;
+	flex-wrap: wrap;
+	background-color: white;
+    width: 1037px;
+    height: auto;
+    min-height: 100px;
+	border: 2px solid;
+	border-color: #4597ba;
+	padding: 5px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 200px;
+    border-radius: 10px;
+    margin-right: 7px;
+    margin-bottom: 7px;
+}
+
+.container {
+    padding: 10px;;
+}
+
+img.imgCard {
+	border-radius: 10px;
+	display: block;
+}
+
+h4 {
+	font-family: Sansita;
+	margin: 5px;
+}
+
+</style>
+</head>
+<body class="body-nomargins">
+
+	<div th:replace ="~{fragments :: navigationBar}"></div>
+	
+	<div class="main-container container-width">
+		Łośmiel się zalozyc u nas konto!
+		<div class="one-big-column">
+			<div th:each="frond : ${frondDtoList}" class="card">
+				<img class="imgCard" alt="Jan" src="../../resources/images/moose-avatar.jpg"
+					th:alt="${frond.user.firstName}" th:src="@{allUsers/imageDisplay/} + ${frond.user.profilePicture} + 'm'"/>
+			  
+			  <div class="container">
+			    <h4 th:text="${frond.user.firstName}+' '+${frond.user.lastName}">
+			    	<b>Jan Kowalski</b>
+			    </h4> 
+			    <form method="GET" action="#" th:action="@{allUsers/sendFriendInvitation/} + ${frond.user.userId}"
+					enctype="text/plain" th:switch="${frond.status}">
+			<!-- W user.userId 'userId' jest nazwa gettera, a nie pola! Jak pole bedzie userId, a getter getId(), to nie zadziala  -->
+			        <input th:case="'ToTy'" type="submit" value="To ty" />
+			        <input th:case="'Przyjaciul'" type="submit" value="Przyjaciul" />
+			        <input th:case="'Nieznajomy'" type="submit" value="Wyślij zaproszenie" />
+			        <input th:case="'Wyslano'" type="submit" value="Wysłano zaproszenie" />
+			        <input th:case="'Oczekuje'" type="submit" value="Zaakceptuj Przyjaciula" />
+				</form>
+			  </div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

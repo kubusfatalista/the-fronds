@@ -1,13 +1,12 @@
-<%@ page language="java" contentType="text/html; UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
 <link rel="stylesheet" type="text/css" href="resources/mainStyle.css">
-<link rel="icon" href="resources/images/moose_front.png">
+<link rel="icon" href="../../resources/images/moose_front.png" th:href="@{/resources/images/moose_front.png}">
 <meta charset="UTF-8">
-<title>Wszyscy zarejestrowani Przyjaciule</title>
+<title>Niech ryczy z bólu ranny łoś!</title>
 <style>
 
 div.one-big-column {
@@ -41,15 +40,13 @@ p {
 
 </style>
 </head>
-<body class="body-nomargins">
-
+<body>
 	<div class="main-container container-width">
 		<div class="one-big-column">
 			<h1>404</h1>
 			<p>Niestety strona o podanym adresie nie istnieje</p>
-			<img src="resources/images/404.jpg"/>
+			<img src="../../resources/images/404.jpg" th:src="@{/resources/images/404.jpg}"/>
 		</div>
 	</div>
-
 </body>
 </html>

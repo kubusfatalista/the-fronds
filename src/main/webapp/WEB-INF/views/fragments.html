@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css">
+<link rel="stylesheet" href="../../resources/font-awesome/css/font-awesome.min.css">
+<link rel="icon" href="../../resources/images/moose_front.png">
+
+<meta charset="UTF-8">
+
+  <body>
+  
+	<div th:fragment="navigationBar" id="nav-container" class="nav-container container-width">
+		<ul id="navigationBar" class="container-width">
+			<li style="float: left"><a href="allUsers.html" th:href="@{/allUsers}">Przyjaciule</a></li>
+			<li><a href="#about">Ustawienia</a></li>
+			<li><a href="#about">Powiadomienia</a></li>
+			<li><a href="#about">Wiadomości</a></li>
+			<li><a id="new-invitations-button" onclick="frondInvitationDropDown()">Zaproszenia</a>
+				<div id="invitationCounter" class="invitation-counter" th:text="${newInvitations}">
+					0 
+				</div>
+				<div id="myDropdown" class="dropdown-content">
+					NIE MASZ NOWYCH ZAPROSZEŃ
+					<!-- doczytywane po załadowaniu strony z fragmentu invitations -->
+				</div> 
+			</li>
+			<li><a href="#news">Wall</a></li>
+			<li>
+				<img id="myAvatarOnNav" class="myAvatarOnNav" alt="moose" src="../../resources/images/moose-avatarxs.jpg" 
+					th:alt="${user.firstName}" th:src="@{/myProfile/miniatureDisplay}" />
+				<a href="myProfile.html" th:href="@{/myProfile}">Mój profil</a>
+			</li>
+		</ul>
+		<script>
+
+		function invitationAccept(relationshipId) {
+			$.get("navi/invitationAccepted/"+relationshipId);
+			$('#acceptId'+relationshipId).css({display : 'none'});
+			$('#declineId'+relationshipId).css({display : 'none'});
+			
+		}
+
+		function invitationDecline(relationshipId) {
+			$.get("navi/invitationDeclined/"+relationshipId);
+			$('#acceptId'+relationshipId).css({display : 'none'});
+			$('#declineId'+relationshipId).css({display : 'none'});
+		}
+
+		
+		function frondInvitationDropDown() {
+		    document.getElementById("myDropdown").classList.toggle("show");
+		}
+
+		$("#myAvatarOnNav").click(function() {
+			var rootUrl = location.href.split("Fronds")[0];
+			window.location = rootUrl + "Fronds/myProfile";
+		});
+
+		$(window).click(function(event) {
+			
+			if (!$(event.target).is('#new-invitations-button')) {
+				// hehe
+				var parts = '.dropdown-content div, .checkIcon, .crossIcon, .new-invitation p, .new-invitation img, .dropdown-content';
+				if (!($(event.target).is(parts))) {
+				    var dropdowns = document.getElementsByClassName("dropdown-content");
+				    var i;
+				    for (i = 0; i < dropdowns.length; i++) {
+				      var openDropdown = dropdowns[i];
+				      if (openDropdown.classList.contains('show')) {
+				        openDropdown.classList.remove('show');
+				      }
+				    }
+				}
+			  }
+		});
+
+		
+		$(document).ready(function(){
+			var rootUrl = location.href.split("Fronds")[0];
+			$.get(rootUrl + "Fronds/navi/getInvitationsCount", function(data) {
+				if(data != 0) {
+					$("#invitationCounter").text(data);
+					$("#invitationCounter").show();
+					$("#myDropdown").load(rootUrl + "Fronds/navi/getInvitations");
+				}
+			}); 
+		});
+
+		</script>
+	</div>
+	
+	<div th:fragment="leftColumn" class="left-column">
+		<div >
+			<img class="profilePhoto" alt="Profilowe" src="../../resources/images/moose-avatar.jpg" 
+				th:alt="${user.firstName}" th:src="@{/myProfile/imageDisplay}" />
+			<h1 class="name" th:text="${user.firstName}+' '+${user.lastName}">
+				Jan Kowalski
+			</h1>
+			<hr>
+			<h1 class="menu">
+				<p class="menu"><a href="myProfile.html" th:href="@{/myProfile}" >Łoś czasu</a></p>
+				<p class="menu"><a href="myInfo.html" th:href="@{/myInfo}">Informacje</a></p>
+				<p class="menu"><a href="myFronds.html" th:href="@{/myFronds}">Twoi przyjaciule</a></p>
+				<p class="menu"><a href="myAlbums.html" th:href="@{/myAlbums}">Zdjęcia twojej japy</a></p>
+			</h1>
+		</div>
+	</div>
+	
+		<div th:fragment="leftColumnFrond" class="left-column">
+		<div >
+			<img class="profilePhoto" alt="Profilowe" src="../../resources/images/moose-avatar.jpg" 
+				th:alt="${user.firstName}" th:src="@{/profile/} + ${user.userId} + '/imageDisplay'" />
+			<h1 class="name" th:text="${user.firstName}+' '+${user.lastName}">
+				Jan Kowalski
+			</h1>
+			<hr>
+			<h1 class="menu">
+				<p class="menu"><a href="profile.html" th:href="@{/profile/} +  ${user.userId}" >Łoś czasu</a></p>
+				<p class="menu"><a href="info.html" th:href="@{/info/} +  ${user.userId}">Informacje</a></p>
+				<p class="menu"><a href="fronds.html" th:href="@{/fronds/} +  ${user.userId}">Przyjaciule</a></p>
+				<p class="menu"><a href="albums.html" th:href="@{/albums/} +  ${user.userId}">Zdjęcia</a></p>
+			</h1>
+		</div>
+	</div>
+	
+	<div th:fragment="rightColumn" class="right-column">
+			
+	</div>
+  
+  </body>
+  
+</html>

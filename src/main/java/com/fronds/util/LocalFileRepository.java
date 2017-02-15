@@ -35,6 +35,7 @@ public class LocalFileRepository implements FileRepository {
 	public void saveImage(String path, String imageName) {
 		try {
 			Files.copy(Paths.get(path + imageName), Paths.get(defaultLocalStore + imageName), StandardCopyOption.REPLACE_EXISTING);
+			ImagesUtil.saveThumbnails(path + imageName, defaultLocalStore + imageName, false);
 		} catch (IOException e) {
 			logger.error(e);
 		}

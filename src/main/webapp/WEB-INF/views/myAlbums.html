@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css" th:href="@{/resources/mainStyle.css}">
+<link rel="stylesheet" href="../../resources/font-awesome/css/font-awesome.min.css" th:href="@{/resources/font-awesome/css/font-awesome.min.css}">
+<link rel="icon" href="../../resources/images/moose_front.png" th:href="@{/resources/images/moose_front.png}">
+<link rel="stylesheet" type="text/css" href="../../resources/modalGallery.css" th:href="@{/resources/modalGallery.css}">
+<meta charset="UTF-8">
+<head>
+<title>Przyjaciule - Twój profil</title>
+
+<style>
+img.photoInAlbum {
+	border: 1px solid #ddd; /* Gray border */
+	border-radius: 4px; /* Rounded border */
+	padding: 4px; /* Some padding */
+	margin: 4px;
+	cursor: pointer;
+	height: 185px; /* nie chce mi sie juz calego layoutu zmieniac ;_; */
+	width: 185px;
+}
+
+img.photoInAlbum:hover {
+	box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+div.addNewPhoto {
+	float: left;
+	height: 185px;
+	width: 185px;
+	border: 2px solid #9ad3de;
+	background-color: white;
+	border-radius: 10px;
+	transition-duration: 0.3s;
+	padding: 3px; /* Some padding */
+	margin: 4px;
+	cursor: pointer;
+}
+
+div.addNewPhotoCenter {
+	text-align: center;
+	width: 100px;
+	margin: auto;
+	margin-top: 40px;
+	font-family: Lobster;
+	font-size: 24px;
+	cursor: pointer;
+}
+
+div.addNewPhoto:hover {
+	background-color: #9ad3de;
+	border: 2px solid #89bdd3;
+	transition-duration: 0.3s;
+}
+
+</style>
+
+</head>
+<body class="body-nomargins">
+
+	<div th:replace ="~{fragments :: navigationBar}"></div>
+
+	<div class="main-container container-width">
+	
+		<div th:replace ="~{fragments :: leftColumn}"></div>
+	
+		<div class="center-column">
+			<form id="addNewPhotoForm" method="POST" action="#" th:action="@{myAlbums/addPhoto}" enctype="multipart/form-data">
+				<input id="openFileDialog" type="file" name="addedPhoto" accept="image/jpeg,image/png,image/gif" style="display:none" />
+			</form>
+			<div id="addNewPhoto" class="addNewPhoto"> 
+				<div class="addNewPhotoCenter">
+					Dodaj nowe zdjęcie
+				</div>
+			</div>
+			<img th:each="userPhoto : ${userPhotoList}" class="photoInAlbum" onclick="showModalWindow()"
+				alt="Image title" src="../../resources/images/moose-avatar.jpg" 
+				th:alt="${userPhoto.imageTitle}" th:src="@{/myAlbums/imageDisplay/} + ${userPhoto.imageSavedName} + 'm'" />
+		</div>
+		
+		<div th:replace ="~{fragments :: rightColumn}"></div>
+	
+	</div>
+		<div id="myModal" class="modal">
+		<span class="close">&times;</span>
+		<div class="image-background">
+			
+			<div th:each="userPhoto : ${userPhotoList}" class="mySlides image-container">
+				<img class="img-slide"
+					alt="Image title" src="../../resources/images/moose-avatar.jpg" 
+					th:alt="${userPhoto.imageTitle}" th:src="@{/myAlbums/imageDisplay/} + ${userPhoto.imageSavedName}" />
+				<div th:text="${userPhoto.imageTitle}" class="text">Image title</div>
+			</div>
+	
+			<a class="prev" onclick="plusSlides(-1)">&lt;</a> <a class="next"
+				onclick="plusSlides(1)">&gt;</a>
+	
+		</div>
+	</div>
+
+</body>
+<script src="../../resources/floatingComponents.js" th:src="@{/resources/floatingComponents.js}"></script>
+<script>
+	
+	var modal = document.getElementById('myModal');
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+		
+		modal.style.display = "none";
+	}
+	
+	
+	var slideIndex = 1;
+	showSlides(slideIndex);
+	
+	function showModalWindow() {
+		modal.style.display = "block";
+	}
+	
+	function plusSlides(n) {
+	 showSlides(slideIndex += n);
+	}
+	
+	function currentSlide(n) {
+	 showSlides(slideIndex = n);
+	}
+	
+	function showSlides(n) {
+	 var i;
+	 var slides = document.getElementsByClassName("mySlides");
+	 if (n > slides.length) {slideIndex = 1}    
+	 if (n < 1) {slideIndex = slides.length}
+	 for (i = 0; i < slides.length; i++) {
+	     slides[i].style.display = "none";  
+	 }
+	 slides[slideIndex-1].style.display = "block";  
+	}
+
+	$("#addNewPhoto").click(function() {
+		$("#openFileDialog").click();
+	});
+
+	$("#openFileDialog").on('change',function(){
+		$("#addNewPhotoForm").submit();
+    });
+
+ 	/* 
+ 	podjebane kolory - dwa szare, dwa morsko-niebieskie
+ 	
+		#c9c9c9
+		#e3e3e3
+		#9ad3de
+		#89bdd3
+ 	*/
+
+</script>
+</html>

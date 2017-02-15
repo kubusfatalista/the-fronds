@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +44,10 @@ public class AllUsersController {
     FileRepository fileRepository;
 
     @RequestMapping(method= RequestMethod.GET)
-    public List<FrondDto> users(HttpSession session) {
+    public List<FrondDto> users(Model model, HttpSession session) {
+		if (!model.containsAttribute("user")) {
+			model.addAttribute(userService.getUserById((int) session.getAttribute(Attributes.USER_ID)));
+		}
         return userService.getAllUsersWithFrondsStatusesList((int) session.getAttribute(Attributes.USER_ID));
     }
     

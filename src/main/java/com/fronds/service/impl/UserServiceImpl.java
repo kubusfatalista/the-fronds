@@ -87,14 +87,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<FrondDto> getAllUsersWithFrondsStatusesList(int userId) {
 		List<User> users = userDao.getUserList();
-		Map<Integer, Relationship> myFronds = relationshipService.getMyFriendsMap(userId);
+		Map<Integer, Relationship> myFronds = relationshipService.getMyRelationshipsMap(userId);
 		List<FrondDto> frondDtoList = new ArrayList<>();
 		for(User user : users) {
 			if(myFronds.containsKey(user.getUserId())) {
+				Relationship frond = myFronds.get(user.getUserId());
 				frondDtoList.add(new FrondDto(
 						user, resolveFrondStatus(
-								userId, myFronds.get(
-										user.getUserId()))));
+								userId, frond)));
 			} else {
 				if(user.getUserId() == userId)
 					frondDtoList.add(new FrondDto(user, "ToTy"));

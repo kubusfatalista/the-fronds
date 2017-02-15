@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css" th:href="@{/resources/mainStyle.css}">
+<link rel="stylesheet" href="../../resources/font-awesome/css/font-awesome.min.css" th:href="@{/resources/font-awesome/css/font-awesome.min.css}">
+<link rel="icon" href="../../resources/images/moose_front.png" th:href="@{/resources/images/moose_front.png}">
+<meta charset="UTF-8">
+<head>
+<title>Przyjaciule - Twój profil</title>
+
+<style>
+
+</style>
+
+</head>
+<body class="body-nomargins">
+
+	<div th:replace ="~{fragments :: navigationBar}"></div>
+
+	<div class="main-container container-width">
+	
+		<div th:replace ="~{fragments :: leftColumn}"></div>
+	
+		<div class="center-column">
+			Informacje o uzytkowniku
+		</div>
+		
+		<div th:replace ="~{fragments :: rightColumn}"></div>
+	
+	</div>
+
+</body>
+
+<script>
+
+ 	/* 
+ 	podjebane kolory - dwa szare, dwa morsko-niebieskie
+ 	
+		#c9c9c9
+		#e3e3e3
+		#9ad3de
+		#89bdd3
+ 	*/
+
+</script>
+</html>

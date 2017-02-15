@@ -1,229 +1,180 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
-<link rel="stylesheet" href="../../resources/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css" th:href="@{/resources/mainStyle.css}">
+<link rel="stylesheet" href="../../resources/font-awesome/css/font-awesome.min.css" th:href="@{/resources/font-awesome/css/font-awesome.min.css}">
+<link rel="icon" href="../../resources/images/moose_front.png" th:href="@{/resources/images/moose_front.png}">
 <meta charset="UTF-8">
+<head>
 <title>Przyjaciule - Twój profil</title>
 
 <style>
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 360px;
-    overflow: auto;
-    max-height: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a:hover {background-color: #f1f1f1}
-
-.show {display:block;}
-
-div.invitation-counter {
-	font-family: Sansita;
-	font-size: 11px;
-	color: white;
-	text-align: center;
-	height: 15px;
-	width: 15px;
-	background-color: red;
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	border-radius: 50%;
-}
-
-div.new-invitation {
+div.one-big-column {
+	margin: auto;
+	margin-top: 50px;
 	display: flex;
-	position: relative;
-	padding: 3px;
-	border: 1px solid #9ad3de;
+	background-color: white;
+    width: 1037px;
+    height: auto;
+    min-height: 100px;
 	border-radius: 5px;
-	margin-top: 2px;
-	max-height: 50px;
+	padding: 10px;
 }
 
-.new-invitation p {
+.login-box {
+	margin: 50px;
+	margin-top: 100px;
+	background-color: white;
+	border-radius: 15px;
+	border-color: #4597ba;
+	border-style: solid;
+	border-width: 5px;
+	width: 400px;
+	height: 300px;
+	padding: 10px;
+
+}
+
+.register-box {
+	margin: 50px;
+	background-color: white;
+	border-radius: 15px;
+	border-color: #4597ba;
+	border-style: solid;
+	border-width: 5px;
+	width: 400px;
+	padding: 10px;
+}
+
+p {
+	font-size: 16px;
 	font-family: Sansita;
-	font-size: 18px;
-	margin-top: auto;
-	margin-left: 5px;
-	padding: 0px;
-	word-wrap: break-word;
-	max-width: 200px;
+	width: 60px;
+	float:left;
 }
 
-.new-invitation img {
-	display: block;
+input[type=text], input[type=password] {
+	font-family: Sansita;
 	border-radius: 5px;
-	width: 50px;
-	height: 50px;
-}
-
-.checkIcon {
-	position: absolute;
-	color: #a9a9a9;	
-	cursor: pointer;
-	transition-duration: 0.3s;
-	display: block;
+	width: 300px;
 	height: 30px;
-	width: 30px;
-	top: 10px;
-	right: 50px;
+	font-size: 18px;
+	margin: 10px;
 }
 
-.crossIcon {
-	position: absolute;
-	color: #a9a9a9;	
+input[type=submit] {
+	font-family: Sansita;
+	font-size: 16px;
+	border-radius: 5px;
+	height: 40px;
+	width: 150px;
+	margin-right: 25px;
+	float: right;
+}
+
+#profilePictureInput {
 	cursor: pointer;
-	transition-duration: 0.3s;
-	display: block;
-	height: 30px;
-	width: 30px;
-	top: 10px;
-	right: 10px;
 }
 
-.checkIcon:hover {
-	color: lightgreen;
+h1.login {
+	float: left;
+	font-family:Lobster;
+	margin-left: 90px
 }
 
-.crossIcon:hover {
-	color: tomato;
+h1.register {
+	position: relative;
+	right: 40px;
+	float: right;
+	font-family:Lobster;
+	margin-left: 90px
 }
 
+img.los {
+	position: relative;
+	left: 40px;
+	bottom: 10px;
+	width: 100px;
+	height: 100px;
+}
+
+img.los2 {
+	position: relative;
+	bottom: 10px;
+	width: 100px;
+	height: 100px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+
+div.error-div {
+	background-color:red;
+	height: 40px;
+	width: 160px;
+	float:left;
+	display:none;
+	
+}
 </style>
 
 </head>
 <body class="body-nomargins">
-
-	<div id="nav-container" class="nav-container container-width">
-		<ul id="navigationBar" class="container-width">
-			<li style="float: left"><a href="#about">Przyjaciule</a></li>
-			<li style="float: left"><a href="#about">Todo szukajka</a></li>
-			<li><a class="topButton" href="#about">Ustawienia</a></li>
-			<li><a class="topButton" href="#about">Powiadomienia</a></li>
-			<li><a class="topButton" href="#about">Wiadomości</a></li>
-			<li><a id="new-invitations-button" onclick="frondInvitationDropDown()" class="topButton">Zaproszenia</a>
-				<div class="invitation-counter">
-				2
-				</div>
-				<div id="myDropdown" class="dropdown-content">
-				    <div class="new-invitation">
-						<img src=C:/mieszkoXS.jpg">
-						<p>mieszko the first</p>
-						<i class="fa fa-times-circle-o  fa-2x crossIcon" aria-hidden="true"></i>
-						<i class="fa fa-check-circle-o fa-2x checkIcon" aria-hidden="true"></i>
-					</div>
-				    <div class="new-invitation">
-						<img src=C:/mieszkoXS.jpg">
-						<p>mieszko the first</p>
-						<i class="fa fa-times-circle-o  fa-2x crossIcon" aria-hidden="true"></i>
-						<i class="fa fa-check-circle-o fa-2x checkIcon" aria-hidden="true"></i>
-					</div>
-					<div class="new-invitation">
-						<img src=C:/mieszkoXS.jpg">
-						<p>grzegorz brzęczyszczykiewicz</p>
-						<i class="fa fa-times-circle-o  fa-2x crossIcon" aria-hidden="true"></i>
-						<i class="fa fa-check-circle-o fa-2x checkIcon" aria-hidden="true"></i>
-					</div>
-					<div class="new-invitation">
-						<img src=C:/mieszkoXS.jpg">
-						<p>grzeg</p>
-						<i class="fa fa-times-circle-o  fa-2x crossIcon" aria-hidden="true"></i>
-						<i class="fa fa-check-circle-o fa-2x checkIcon" aria-hidden="true"></i>
-					</div>
-			    </div>
-			</li>
-			<li><a class="topButton" href="#news">Wall</a></li>
-			<li><a class="topButton" href="#home">Mój profil</a></li>
-		</ul>
+	<div class="one-big-column">
+		<div class="login-box">
+			<h1 class="login"> Zaloguj się </h1>
+			<img class = "los" src="../../resources/images/los_przebiega.png"></img>
+			<form method="POST" th:action="@{/login}">
+				<p>Login</p>
+				<input id="loginInput" type="text" name="login" />
+				<p>Hasło</p>
+				<input type="password" name="password" />
+				<input type="submit" value="Zaloguj się" />
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			</form>		
+		</div>
+		<div class="register-box">
+			<img class = "los2" src="../../resources/images/los_przebiega.png"></img>
+			<h1 class="register"> Zarejestruj się </h1>
+			<form method="POST" th:action="@{/register}">
+				<p>Imię</p>
+				<input type="text" name="firstName" />
+				<p>Nazwisko</p>
+				<input type="text" name="lastName" />
+				<p>Login</p>
+				<input type="text" name="login" />
+				<p>Hasło</p>
+				<input type="password" name="password" />
+				<input id="openFileDialog" type="file" name="profilePicture" accept="image/jpeg,image/png,image/gif" style="display:none" />
+				<p>Japa</p>
+				<input id="profilePictureInput" type="text" value="Kliknij by wybrać" readonly/>
+				<input type="submit" value="Zarejestruj się" />
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			</form>	
+		</div>
 	</div>
-
-	<div class="main-container container-width">
-	
-		<div class="left-column">
-			<div >
-				<img class="profilePhoto" alt="${user.firstName}" src="myProfile/imageDisplay${content}" />
-				<h1 class="name">
-					${user.firstName} ${user.lastName}
-				</h1>
-				<hr>
-				<h1 class="menu">
-					<p class="menu"><a href="myProfile">Łoś czasu</a></p>
-					<p class="menu"><a href="myInfo">Informacje</a></p>
-					<p class="menu"><a href="myFronds">Twoi przyjaciule</a></p>
-					<p class="menu"><a href="myAlbums">Zdjęcia twojej japy</a></p>
-				</h1>
-			</div>
-		</div>
-	
-		<div class="center-column">
-
-		</div>
-		
-		<div class="right-column">
-			
-		</div>
-	
-	</div>
-
 </body>
+
 <script>
 
-	 var targetLeft  = 0;
-	 var targetTop = 0;
-	 var $navBar = $('#navigationBar');
-	 var $navContainer =$('#nav-container');
-	 var $leftColumn = $('.left-column');
-	 var $rightColumn = $('.right-column');
-	 $(window).scroll(function() {
-		if($navContainer.css('margin-left') == '0px') {
-	    	var left = $(window).scrollLeft();
-	    	var adj = targetLeft - left;
-	    	$navBar.css({left: adj});
-            $leftColumn.css({left: adj});
-            $rightColumn.css({left: adj});
-		}
-	 });
+	$("#profilePictureInput").click(function() {
+		$("#openFileDialog").click();
+	});
+	
+	$("#openFileDialog").on('change',function(){
+		var filename = $("#openFileDialog").val().replace(/.*(\/|\\)/, '');
+		$("#profilePictureInput").val(filename);
+	});
 
-
-	$(window).resize(function() {
-		 if($navContainer.css('margin-left') != '0px') {
-	         $navBar.css({left: 'auto'});
-            $leftColumn.css({left: 'auto'});
-            $rightColumn.css({left: 'auto'});
-		 }
- 	});
-
-	/* When the user clicks on the button, 
-	toggle between hiding and showing the dropdown content */
-	function frondInvitationDropDown() {
-	    document.getElementById("myDropdown").classList.toggle("show");
-	}
-
-	$(window).click(function() {
-		if (!$(event.target).is('#new-invitations-button')) {
-			// hehe
-			var parts = '.dropdown-content div, .checkIcon, .crossIcon, .new-invitation p, .new-invitation img, .dropdown-content'
-			if (!($(event.target).is(parts))) {
-			    var dropdowns = document.getElementsByClassName("dropdown-content");
-			    var i;
-			    for (i = 0; i < dropdowns.length; i++) {
-			      var openDropdown = dropdowns[i];
-			      if (openDropdown.classList.contains('show')) {
-			        openDropdown.classList.remove('show');
-			      }
-			    }
-			}
-		  }
+	$(document).ready(function() {
+		$("#loginInput").focus();
 	});
 
  	/* 

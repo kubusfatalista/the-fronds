@@ -1,13 +1,7 @@
 package com.fronds.web.controller;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +9,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fronds.domain.model.Relationship;
-import com.fronds.service.RelationshipService;
 import com.fronds.service.TimeMooseStatusService;
-import com.fronds.service.UserPhotoService;
 import com.fronds.service.UserService;
 import com.fronds.util.Attributes;
 import com.fronds.util.FileRepository;
@@ -44,15 +32,6 @@ public class MyProfileController {
 
 	@Autowired
 	UserService userService;
-
-	@Autowired
-	UserPhotoService userPhotoService;
-
-	@Autowired
-	ServletContext context;
-	
-	@Autowired
-	RelationshipService relationshipService;
 	
 	@Autowired
 	TimeMooseStatusService timeMooseStatusService;
@@ -67,9 +46,6 @@ public class MyProfileController {
 			model.addAttribute(userService.getUserById((int) session.getAttribute(Attributes.USER_ID)));
 		}
 		model.addAttribute(timeMooseStatusService.getTimeMooseStatusesForUserId((int) session.getAttribute(Attributes.USER_ID)));
-		List<Relationship> newInvitations = relationshipService.getMyInvitations((int) session.getAttribute(Attributes.USER_ID));
-		model.addAttribute(newInvitations);
-		model.addAttribute("newInvitations", newInvitations.size());
 		return "myProfile";
 	}
 
@@ -89,46 +65,9 @@ public class MyProfileController {
 		ImagesUtil.writeImageToResponse(imgData, response, logger);
 	}
 	
-	@RequestMapping(value = "/miniatureInInv/{imageName}", method = RequestMethod.GET)
-	@ResponseBody
-	public void displayMiniatureInInvitation(@PathVariable String imageName, HttpServletResponse response, HttpSession session) {
-		byte[] imgData = fileRepository.getImage(imageName);
-		ImagesUtil.writeImageToResponse(imgData, response, logger);
-	}
-	
-	@RequestMapping(value = "/invitationAccepted/{relationshipId}", method = RequestMethod.GET)
-	public void invitationAccepted(@PathVariable int relationshipId, HttpServletResponse response, HttpSession session) {
-		System.out.println("############################################################" + relationshipId);
-	}
-	
-	@RequestMapping(value = "/invitationDeclined/{relationshipId}", method = RequestMethod.GET)
-	public void invitationDeclined(@PathVariable int relationshipId, HttpServletResponse response, HttpSession session) {
-		System.out.println("############################################################" + relationshipId);
-	}
-	
 	@RequestMapping(value = "/createTimeMooseStatus", method = RequestMethod.GET)
 	public String createTimeMooseStatus(@RequestParam("statusText") String statusText, HttpSession session) {
 		timeMooseStatusService.createTimeMooseStatus((int) session.getAttribute(Attributes.USER_ID), statusText);
 		return "redirect:/myProfile";
 	}
-
-	@RequestMapping(value = "/addPhoto", method = RequestMethod.POST)
-	public String addPhotoToAlbum(@RequestPart("addedPhoto") Part profilePicture, RedirectAttributes model, HttpSession session) {
-
-		long creationDate = new Date().getTime();
-		String addedPictureName = (String)session.getAttribute("userName") + creationDate;
-
-		if (profilePicture != null) {
-			try {
-				profilePicture.write(context.getRealPath("/") + addedPictureName);
-			} catch (IOException e) {
-				logger.error(e);
-			}
-		}
-		fileRepository.saveImage(context.getRealPath("/"), addedPictureName);
-		userPhotoService.saveUserPhoto((int) session.getAttribute(Attributes.USER_ID), addedPictureName);
-
-		return "redirect:/myAlbums";
-	}
-
 }

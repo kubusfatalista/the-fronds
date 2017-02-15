@@ -1,5 +1,6 @@
 package com.fronds.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import com.fronds.dao.RelationshipDao;
 import com.fronds.domain.model.Relationship;
 import com.fronds.domain.model.RelationshipStatus;
 import com.fronds.domain.model.User;
+import com.fronds.dto.FrondDto;
 import com.fronds.service.RelationshipService;
 
 @Service("relationshipService")
@@ -39,7 +41,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
 	@Override
 	public List<Relationship> getMyFriends(int userId) {
-		return relationshipDao.getMyFriends(userId);
+		return relationshipDao.getMyRelationships(userId);
 	}
 	
 	@Override
@@ -56,8 +58,8 @@ public class RelationshipServiceImpl implements RelationshipService {
 	}
 	
 	@Override
-	public Map<Integer, Relationship> getMyFriendsMap(int userId) {
-		List<Relationship> list = relationshipDao.getMyFriends(userId);
+	public Map<Integer, Relationship> getMyRelationshipsMap(int userId) {
+		List<Relationship> list = relationshipDao.getMyRelationships(userId);
 		Map<Integer, Relationship> map = new HashMap<>();
 		for(Relationship rel : list) {
 			if(rel.getUser().getUserId() == userId) {
@@ -75,6 +77,19 @@ public class RelationshipServiceImpl implements RelationshipService {
 	}
 	
 	@Override
+	public List<FrondDto> getMyFronds(int userId) {
+		List<Relationship> relationships = relationshipDao.getMyFronds(userId);
+		List<FrondDto> frondDtos = new ArrayList<>();
+		for(Relationship rel : relationships) {
+			if(rel.getFriend().getUserId() == userId)
+				frondDtos.add(new FrondDto(rel.getUser(), rel.getLastUpdateDate()));
+			else if(rel.getUser().getUserId() == userId)
+				frondDtos.add(new FrondDto(rel.getFriend(), rel.getLastUpdateDate()));
+		}
+		return frondDtos;
+	}
+	
+	@Override
 	public void acceptInvitation(int relationshipId) {
 		Relationship relationship = relationshipDao.getRelationshipById(relationshipId);
 		relationship.setRelationshipStatus(RelationshipStatus.FRONDS);
@@ -85,5 +100,10 @@ public class RelationshipServiceImpl implements RelationshipService {
 	public void declineInvitation(int relationshipId) {
 		Relationship relationship = relationshipDao.getRelationshipById(relationshipId);
 		relationship.setRelationshipStatus(RelationshipStatus.BLOCKED);
+	}
+	
+	@Override
+	public Long getMyInvitationsCount(int userId) {
+		return relationshipDao.getMyInvitationsCount(userId);
 	}
 }
