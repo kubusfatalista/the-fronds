@@ -7,6 +7,7 @@ import com.fronds.domain.model.Relationship;
 public interface RelationshipDao {
 	
 	public Relationship getRelationshipById(int relationshipId);
+	public Relationship getRelationshipByUserAndFriendIds(int userId, int friendId);
 	public void saveRelationship(Relationship relationship);
 	public void updateRelationship(Relationship relationship);
 	public List<Relationship> getMyRelationships(int userId);

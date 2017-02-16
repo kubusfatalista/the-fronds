@@ -1,9 +1,8 @@
 package com.fronds.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import com.fronds.dao.RelationshipDao;
 import com.fronds.domain.model.Relationship;
 import com.fronds.domain.model.RelationshipStatus;
 import com.fronds.domain.model.User;
-import com.fronds.dto.FrondDto;
 import com.fronds.service.RelationshipService;
 
 @Service("relationshipService")
@@ -22,11 +20,15 @@ public class RelationshipServiceImpl implements RelationshipService {
 	
 	@Autowired
 	RelationshipDao relationshipDao;
-
+	
+	
+	public Relationship getRelationshipByUserAndFriendIds(int userId, int friendId) {
+		return relationshipDao.getRelationshipByUserAndFriendIds(userId, friendId);
+	}
 	
 	@Override
-	public void getRelationshipById(int relationshipId) {
-		relationshipDao.getRelationshipById(relationshipId);
+	public Relationship getRelationshipById(int relationshipId) {
+		return relationshipDao.getRelationshipById(relationshipId);
 	}
 
 	@Override
@@ -38,36 +40,29 @@ public class RelationshipServiceImpl implements RelationshipService {
 	public void updateRelationship(Relationship relationship) {
 		relationshipDao.updateRelationship(relationship);
 	}
-
-	@Override
-	public List<Relationship> getMyFriends(int userId) {
-		return relationshipDao.getMyRelationships(userId);
-	}
 	
 	@Override
 	public void sendFriendRequest(int userId, int friendId) {
-		Relationship relationship = new Relationship();
-		User user = new User();
-		user.setUserId(userId);
-		User friend = new User();
-		friend.setUserId(friendId);
-		relationship.setUser(user);
-		relationship.setFriend(friend);
-		relationship.setRelationshipStatus(RelationshipStatus.INVITATION_SENT);
-		relationshipDao.saveRelationship(relationship);
+		Relationship relationshipSender = new Relationship();
+		User sender = new User();
+		sender.setUserId(userId);
+		User receiver = new User();
+		receiver.setUserId(friendId);
+		relationshipSender.setUser(sender);
+		relationshipSender.setFriend(receiver);
+		relationshipSender.setRelationshipStatus(RelationshipStatus.INVITATION_SENT);
+		Relationship relationshipReceiver = new Relationship();
+		relationshipReceiver.setUser(receiver);
+		relationshipReceiver.setFriend(sender);
+		relationshipReceiver.setRelationshipStatus(RelationshipStatus.INVITATION_WAITING);
+		relationshipDao.saveRelationship(relationshipReceiver);
+		relationshipDao.saveRelationship(relationshipSender);
 	}
 	
 	@Override
 	public Map<Integer, Relationship> getMyRelationshipsMap(int userId) {
 		List<Relationship> list = relationshipDao.getMyRelationships(userId);
-		Map<Integer, Relationship> map = new HashMap<>();
-		for(Relationship rel : list) {
-			if(rel.getUser().getUserId() == userId) {
-				map.put(rel.getFriend().getUserId(), rel);
-			} else if(rel.getFriend().getUserId() == userId) {
-				map.put(rel.getUser().getUserId(), rel);
-			}
-		}
+		Map<Integer, Relationship> map = list.stream().collect(Collectors.toMap(n -> ((Relationship)n).getFriend().getUserId() , c -> c));
 		return map;
 	}
 
@@ -77,22 +72,20 @@ public class RelationshipServiceImpl implements RelationshipService {
 	}
 	
 	@Override
-	public List<FrondDto> getMyFronds(int userId) {
-		List<Relationship> relationships = relationshipDao.getMyFronds(userId);
-		List<FrondDto> frondDtos = new ArrayList<>();
-		for(Relationship rel : relationships) {
-			if(rel.getFriend().getUserId() == userId)
-				frondDtos.add(new FrondDto(rel.getUser(), rel.getLastUpdateDate()));
-			else if(rel.getUser().getUserId() == userId)
-				frondDtos.add(new FrondDto(rel.getFriend(), rel.getLastUpdateDate()));
-		}
-		return frondDtos;
+	public List<Relationship> getMyFronds(int userId) {
+		return relationshipDao.getMyFronds(userId);
 	}
+	
+	// TODO PRZEPRASZAM
+	// TODO MODEL BAZY LVL OVER 9000
 	
 	@Override
 	public void acceptInvitation(int relationshipId) {
 		Relationship relationship = relationshipDao.getRelationshipById(relationshipId);
 		relationship.setRelationshipStatus(RelationshipStatus.FRONDS);
+		Relationship relationship2 = relationshipDao.
+				getRelationshipByUserAndFriendIds(relationship.getFriend().getUserId(), relationship.getUser().getUserId());
+		relationship2.setRelationshipStatus(RelationshipStatus.FRONDS);
 		
 	}
 	
@@ -100,6 +93,9 @@ public class RelationshipServiceImpl implements RelationshipService {
 	public void declineInvitation(int relationshipId) {
 		Relationship relationship = relationshipDao.getRelationshipById(relationshipId);
 		relationship.setRelationshipStatus(RelationshipStatus.BLOCKED);
+		Relationship relationship2 = relationshipDao.
+				getRelationshipByUserAndFriendIds(relationship.getFriend().getUserId(), relationship.getUser().getUserId());
+		relationship2.setRelationshipStatus(RelationshipStatus.BLOCKED);
 	}
 	
 	@Override

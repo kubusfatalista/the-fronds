@@ -8,5 +8,6 @@ public interface TimeMooseStatusDao {
     public void saveTimeMooseStatus(TimeMooseStatus timeMooseStatus);
     public List<TimeMooseStatus> getTimeMooseStatusesForUserId(int userId);
     public TimeMooseStatus getTimeMooseStatusById(int statusId);
+    public List<TimeMooseStatus> getTimeMooseStatusesForMyWall(int userId);
 
 }

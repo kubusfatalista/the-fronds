@@ -48,6 +48,7 @@ li a:hover {
     max-height: 200px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     top: 50px;
+    left: 0px;
     z-index: 1;
 }
 
@@ -55,7 +56,7 @@ li a:hover {
 
 .show {display:block;}
 
-div.invitation-counter {
+div.red-counter {
 	display: none;
 	font-family: Sansita;
 	font-size: 11px;
@@ -220,4 +221,51 @@ img.profilePhoto {
 	display: block;
 	border: 3px solid black;
 	margin: 20px;
+}
+
+div.time-mooose-status-div {
+	width: 600px;
+	float:left;
+	margin: 5px 10px 5px 10px;
+	border: 2px solid #89bdd3;
+	border-radius: 10px;
+}
+
+p.time-moose-status-user {
+	float:left;
+	margin:5px;
+	width: 300px;
+	font-family: Sansita;
+	font-size: 16px;
+}
+
+p.time-moose-status-date {
+	float:right;
+	margin:5px;
+	font-family: Sansita;
+	font-size: 16px;
+}
+
+p.time-moose-status-location {
+	float:left;
+	margin:5px;
+	font-family: Sansita;
+	font-size: 14px;
+}
+
+div.time-moose-status-content {
+	float:left;
+	margin: 5px;
+    width: 580px;
+    height: auto;
+    word-wrap: break-word;
+    padding: 5px;
+    font-family: Sansita;
+	font-size: 18px;
+}
+
+img.timeMooseStatusAvatar {
+	border-radius: 10px;
+	float:left;
+	margin:5px;
 }

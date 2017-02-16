@@ -41,7 +41,7 @@ public class Relationship {
 
 	@ManyToOne
     @JoinColumn(name = "userId", nullable = false)
-    private User user; // kto pierwszy wysle zaproszenie ten jest w userId
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "friendId", nullable = false)

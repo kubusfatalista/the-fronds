@@ -9,15 +9,15 @@
 </head>
 <body>
 	<div th:fragment="invitationsList">
-		<div class="new-invitation" th:each="invite : ${relationshipList}">
+		<div th:id="|invitationId${invite.relationshipId}|" class="new-invitation" th:each="invite : ${relationshipList}">
 			<img alt="Jan" src="../../resources/images/moose-avatarxs.jpg"
-				th:alt="${invite.user.firstName}" th:src="@{navi/miniatureInInv/} + ${invite.user.profilePicture} + 'xs'">
-			<p th:text="${invite.user.firstName}+' '+${invite.user.lastName}"> 
+				th:alt="${invite.friend.firstName}" th:src="@{navi/miniatureInInv/} + ${invite.friend.profilePicture} + 'xs'">
+			<p th:text="${invite.friend.firstName}+' '+${invite.friend.lastName}"> 
 				Jan Nowak
 			</p>
-			<i th:id="|declineId${invite.relationshipId}|" th:onclick="|invitationDecline(${invite.relationshipId})|" 
+			<i th:onclick="|invitationDecline(${invite.relationshipId})|" 
 				class="fa fa-times-circle-o  fa-2x crossIcon" aria-hidden="true"></i>
-			<i th:id="|acceptId${invite.relationshipId}|" th:onclick="|invitationAccept(${invite.relationshipId})|" 
+			<i th:onclick="|invitationAccept(${invite.relationshipId})|" 
 				class="fa fa-check-circle-o fa-2x checkIcon" aria-hidden="true"></i>
 		</div>
 	</div> 

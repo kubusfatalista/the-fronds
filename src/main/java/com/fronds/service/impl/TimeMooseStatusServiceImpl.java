@@ -53,6 +53,9 @@ public class TimeMooseStatusServiceImpl implements TimeMooseStatusService {
 		return timeMooseStatusDao.getTimeMooseStatusById(statusId);
 	}
 
-
+	@Override
+	public List<TimeMooseStatus> getTimeMooseStatusesForMyWall(int userId) {
+		return timeMooseStatusDao.getTimeMooseStatusesForMyWall(userId);
+	}
 
 }

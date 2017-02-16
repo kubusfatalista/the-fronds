@@ -29,15 +29,24 @@ public class RelationshipDaoImpl extends AbstractDao<Integer, Relationship> impl
 	public void updateRelationship(Relationship relationship) {
 		update(relationship);
 	}
+	
+	@Override  // TODO JEZÓ popraw to bo to jest rak z przerzutami co tu sie za moment wydarzy
+	public Relationship getRelationshipByUserAndFriendIds(int userId, int friendId) {
+		
+		CriteriaQuery<Relationship> criteria = getCriteriaBuilder().createQuery(Relationship.class);
+		Root<Relationship> root = criteria.from(Relationship.class);
+		criteria.where(getCriteriaBuilder().and(
+				getCriteriaBuilder().equal(root.get(Relationship_.user), userId),
+				getCriteriaBuilder().equal(root.get(Relationship_.friend), friendId)));
+		
+		return getSession().createQuery(criteria).getSingleResult();
+	}
 
 	@Override
 	public List<Relationship> getMyRelationships(int userId) {
 		CriteriaQuery<Relationship> criteria = getCriteriaBuilder().createQuery(Relationship.class);
 		Root<Relationship> root = criteria.from(Relationship.class);
-		criteria.where(getCriteriaBuilder().or(
-				getCriteriaBuilder().equal(root.get(Relationship_.user), userId),
-				getCriteriaBuilder().equal(root.get(Relationship_.friend), userId)));
-		
+		criteria.where(getCriteriaBuilder().equal(root.get(Relationship_.user), userId));
 		return getSession().createQuery(criteria).getResultList();
 	}
 
@@ -46,8 +55,8 @@ public class RelationshipDaoImpl extends AbstractDao<Integer, Relationship> impl
 		CriteriaQuery<Relationship> criteria = getCriteriaBuilder().createQuery(Relationship.class);
 		Root<Relationship> root = criteria.from(Relationship.class);
 		criteria.where(getCriteriaBuilder().and(
-				getCriteriaBuilder().equal(root.get(Relationship_.friend), userId),
-				getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.INVITATION_SENT)
+				getCriteriaBuilder().equal(root.get(Relationship_.user), userId),
+				getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.INVITATION_WAITING)
 				));
 		
 		return getSession().createQuery(criteria).getResultList();
@@ -58,11 +67,9 @@ public class RelationshipDaoImpl extends AbstractDao<Integer, Relationship> impl
 		CriteriaQuery<Relationship> criteria = getCriteriaBuilder().createQuery(Relationship.class);
 		Root<Relationship> root = criteria.from(Relationship.class);
 		criteria.where(getCriteriaBuilder().and(
-							getCriteriaBuilder().or(getCriteriaBuilder().equal(root.get(Relationship_.user), userId),
-													getCriteriaBuilder().equal(root.get(Relationship_.friend), userId)),
-							getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.FRONDS)
-				));
-		
+					getCriteriaBuilder().equal(root.get(Relationship_.user), userId)),
+					getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.FRONDS)
+				);
 		return getSession().createQuery(criteria).getResultList();
 	}
 	
@@ -72,8 +79,8 @@ public class RelationshipDaoImpl extends AbstractDao<Integer, Relationship> impl
 		Root<Relationship> root = criteria.from(Relationship.class);
 		criteria.multiselect(getCriteriaBuilder().count(root));
 		criteria.where(getCriteriaBuilder().and(
-				getCriteriaBuilder().equal(root.get(Relationship_.friend), userId),
-				getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.INVITATION_SENT)));
+				getCriteriaBuilder().equal(root.get(Relationship_.user), userId),
+				getCriteriaBuilder().equal(root.get(Relationship_.relationshipStatus), RelationshipStatus.INVITATION_WAITING)));
 		
 		return getSession().createQuery(criteria).getSingleResult();
 	}

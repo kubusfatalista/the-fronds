@@ -15,6 +15,11 @@ import com.fronds.domain.model.TimeMooseStatus_;
 public class TimeMooseStatusDaoImpl extends AbstractDao<Integer, TimeMooseStatus> implements TimeMooseStatusDao {
 
 	@Override
+	public TimeMooseStatus getTimeMooseStatusById(int id) {
+		return getByKey(id);
+	}
+	
+	@Override
 	public void saveTimeMooseStatus(TimeMooseStatus timeMooseStatus) {
 		save(timeMooseStatus);
 	}
@@ -30,8 +35,25 @@ public class TimeMooseStatusDaoImpl extends AbstractDao<Integer, TimeMooseStatus
 		return getSession().createQuery(criteria).getResultList();
 	}
 
+
+	/**
+	 *  uzywajac criteria query nie da sie zrobic joina jak nie mamy wszystkiego pomapowanego
+	 *  czyli jak chce polaczyc tabele normalnie po idkach, to musze uzyc albo HQL albo natywnego
+	 *  nie fajnie. nie podoba mi sie
+	 */
 	@Override
-	public TimeMooseStatus getTimeMooseStatusById(int id) {
-		return getByKey(id);
+	public List<TimeMooseStatus> getTimeMooseStatusesForMyWall(int userId) {
+		
+		List<TimeMooseStatus> statuses = getSession().createNativeQuery(
+			"select distinct s.timeMooseStatusId, s.creationDate, s.lastUpdateDate, s.latitude, s.longitude, s.text, s.userId " +
+			"from timemoosestatuses as s " +
+			"join relationships on s.userId=relationships.friendId " +
+			"join users on relationships.userId=users.userId " +
+			"where users.userId = :userId or s.userId = :userId " +
+			"order by s.creationDate DESC", TimeMooseStatus.class)
+			.setParameter("userId", userId)
+			.getResultList();
+		
+		return statuses;
 	}
 }

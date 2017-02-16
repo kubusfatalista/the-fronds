@@ -11,6 +11,8 @@ public interface TimeMooseStatusService {
 	void saveTimeMooseStatus(TimeMooseStatus timeMooseStatus);
 
 	List<TimeMooseStatus> getTimeMooseStatusesForUserId(int userId);
+	
+	List<TimeMooseStatus> getTimeMooseStatusesForMyWall(int userId);
 
 	TimeMooseStatus getTimeMooseStatusById(int statusId);
 }

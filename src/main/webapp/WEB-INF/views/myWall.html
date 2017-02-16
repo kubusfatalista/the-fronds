@@ -9,7 +9,9 @@
 <meta charset="UTF-8">
 <head>
 <title>Przyjaciule</title>
+<style>
 
+</style>
 </head>
 <body class="body-nomargins">
 
@@ -17,25 +19,27 @@
 
 	<div class="main-container container-width">
 	
-		<div th:replace ="~{fragments :: leftColumnFrond}"></div>
+		<div th:replace ="~{fragments :: leftColumnEmpty}"></div>
 	
 		<div class="center-column">
-			
+		
 			<div class="time-mooose-status-div" th:each="timeMooseStatus : ${timeMooseStatusList}">
 				<img class="timeMooseStatusAvatar" alt="avatarXS" src="../../resources/images/moose-avatarxs.jpg"
-					 th:alt="${user.firstName}" th:src="@{/profile/} + ${user.userId} + '/miniatureDisplay'">
-				<p class="time-moose-status-user" th:text="${user.firstName}+' '+${user.lastName}">Jan Kowalski</p>
+					 th:alt="${user.firstName}" th:src="@{/profile/} + ${timeMooseStatus.user.userId} + '/miniatureDisplay'">
+				<p class="time-moose-status-user" th:text="${timeMooseStatus.user.firstName}+' '+${timeMooseStatus.user.lastName}">Jan Kowalski</p>
 				<p class="time-moose-status-date" th:text="${timeMooseStatus.creationDate}">01.01.2017</p>
 				<p class="time-moose-status-location"></p>
 				<div class="time-moose-status-content" th:text="${timeMooseStatus.text}">Tekst statusu</div>
 			</div>
-			
+
 		</div>
 		
 		<div th:replace ="~{fragments :: rightColumn}"></div>
 	
-	</div>
 
 </body>
 <script src="../../resources/floatingComponents.js" th:src="@{/resources/floatingComponents.js}"></script>
+<script>
+
+</script>
 </html>

@@ -19,15 +19,15 @@
 			<li><a href="#about">Powiadomienia</a></li>
 			<li><a href="#about">Wiadomości</a></li>
 			<li><a id="new-invitations-button" onclick="frondInvitationDropDown()">Zaproszenia</a>
-				<div id="invitationCounter" class="invitation-counter" th:text="${newInvitations}">
+				<div id="invitationCounter" class="red-counter" th:text="${newInvitations}">
 					0 
 				</div>
-				<div id="myDropdown" class="dropdown-content">
+				<div id="invitationsDropdown" class="dropdown-content">
 					NIE MASZ NOWYCH ZAPROSZEŃ
 					<!-- doczytywane po załadowaniu strony z fragmentu invitations -->
 				</div> 
 			</li>
-			<li><a href="#news">Wall</a></li>
+			<li><a href="myWall.html" th:href="@{/myWall}">Wall</a></li>
 			<li>
 				<img id="myAvatarOnNav" class="myAvatarOnNav" alt="moose" src="../../resources/images/moose-avatarxs.jpg" 
 					th:alt="${user.firstName}" th:src="@{/myProfile/miniatureDisplay}" />
@@ -38,20 +38,25 @@
 
 		function invitationAccept(relationshipId) {
 			$.get("navi/invitationAccepted/"+relationshipId);
-			$('#acceptId'+relationshipId).css({display : 'none'});
-			$('#declineId'+relationshipId).css({display : 'none'});
+			$('#invitationId'+relationshipId).fadeOut(400, decreaseInvitationsCounter());
 			
 		}
 
 		function invitationDecline(relationshipId) {
 			$.get("navi/invitationDeclined/"+relationshipId);
-			$('#acceptId'+relationshipId).css({display : 'none'});
-			$('#declineId'+relationshipId).css({display : 'none'});
+			$('#invitationId'+relationshipId).fadeOut(400, decreaseInvitationsCounter());
+		}
+
+		function decreaseInvitationsCounter() {
+			$("#invitationCounter").text($("#invitationCounter").text() - 1);
+			if($("#invitationCounter").text() == 0) {
+				$("#invitationCounter").fadeOut();
+			}
 		}
 
 		
 		function frondInvitationDropDown() {
-		    document.getElementById("myDropdown").classList.toggle("show");
+		    document.getElementById("invitationsDropdown").classList.toggle("show");
 		}
 
 		$("#myAvatarOnNav").click(function() {
@@ -78,13 +83,13 @@
 		});
 
 		
-		$(document).ready(function(){
+		 $(document).ready(function(){
 			var rootUrl = location.href.split("Fronds")[0];
 			$.get(rootUrl + "Fronds/navi/getInvitationsCount", function(data) {
 				if(data != 0) {
 					$("#invitationCounter").text(data);
 					$("#invitationCounter").show();
-					$("#myDropdown").load(rootUrl + "Fronds/navi/getInvitations");
+					$("#invitationsDropdown").load(rootUrl + "Fronds/navi/getInvitations");
 				}
 			}); 
 		});
@@ -109,7 +114,7 @@
 		</div>
 	</div>
 	
-		<div th:fragment="leftColumnFrond" class="left-column">
+	<div th:fragment="leftColumnFrond" class="left-column">
 		<div >
 			<img class="profilePhoto" alt="Profilowe" src="../../resources/images/moose-avatar.jpg" 
 				th:alt="${user.firstName}" th:src="@{/profile/} + ${user.userId} + '/imageDisplay'" />
@@ -126,8 +131,23 @@
 		</div>
 	</div>
 	
+		<div th:fragment="leftColumnEmpty" class="left-column">
+		<div >
+
+			<h1 class="menu">
+				<p class="menu">Aktualności</p>
+			</h1>
+
+		</div>
+	</div>
+	
 	<div th:fragment="rightColumn" class="right-column">
-			
+			<h1 class="menu">
+				<p>Lek na haluksy</p>
+				<p>INO DZISIAJ PROMOCJA</p>
+				<p>LEKARZE GO NIENAWIDZO</p>
+				<p>[zobacz memy]</p>
+			</h1>
 	</div>
   
   </body>

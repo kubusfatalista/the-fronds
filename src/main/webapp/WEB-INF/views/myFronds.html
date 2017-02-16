@@ -17,7 +17,8 @@
 	    width: 185px;
 	    border-radius: 10px;
 	    padding: 4px;
-	    margin: 4px;
+	    margin-right: 8px;
+	    margin-bottom: 8px;
 	}
 	
 	.container {
@@ -56,21 +57,20 @@
 		<div th:replace ="~{fragments :: leftColumn}"></div>
 	
 		<div class="center-column flex">
-			<div th:each="frond : ${frondDtoList}" class="card" 
-				th:id="|frondCardId${frond.user.userId}|" th:onclick="|openProfile(${frond.user.userId})|" >
+			<div th:each="frond : ${relationshipList}" class="card" 
+				th:id="|frondCardId${frond.friend.userId}|" th:onclick="|openProfile(${frond.friend.userId})|" >
 				<img class="frondImage" alt="Jan" src="../../resources/images/moose-avatar.jpg"
-					th:alt="${frond.user.firstName}" th:src="@{allUsers/imageDisplay/} + ${frond.user.profilePicture} + 'm'"/>
+					th:alt="${frond.friend.firstName}" th:src="@{allUsers/imageDisplay/} + ${frond.friend.profilePicture} + 'm'"/>
 			  <div class="container">
-			    <h4 th:text="${frond.user.firstName}+' '+${frond.user.lastName}">
+			    <h4 th:text="${frond.friend.firstName}+' '+${frond.friend.lastName}">
 			    	<b>Jan Kowalski</b>
 			    </h4>
-			    <h5 th:text="'Przyjaciule od ' + ${frond.date}">
+			    <h5 th:text="'Przyjaciule od ' + ${frond.lastUpdateDate}">
 			    	Przyjaciule od 01.01.2016
 			    </h5>
 			  </div>
 			</div>
 		</div>
-	</div>
 		
 		<div th:replace ="~{fragments :: rightColumn}"></div>
 	
