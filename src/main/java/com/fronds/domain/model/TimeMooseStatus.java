@@ -46,7 +46,7 @@ public class TimeMooseStatus {
     private User user;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "timeMooseStatus")
 	private List<Comment> comments;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "timeMooseStatus")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "timeMooseStatus")
 	private Set<Reaction> reactions;
 	
 	public TimeMooseStatus() { }

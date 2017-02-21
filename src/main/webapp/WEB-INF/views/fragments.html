@@ -24,14 +24,14 @@
 				</div>
 				<div id="invitationsDropdown" class="dropdown-content">
 					NIE MASZ NOWYCH ZAPROSZEŃ
-					<!-- doczytywane po załadowaniu strony z fragmentu invitations -->
-				</div> 
+					
+				</div>
 			</li>
 			<li><a href="myWall.html" th:href="@{/myWall}">Wall</a></li>
 			<li>
 				<img id="myAvatarOnNav" class="myAvatarOnNav" alt="moose" src="../../resources/images/moose-avatarxs.jpg" 
 					th:alt="${user.firstName}" th:src="@{/myProfile/miniatureDisplay}" />
-				<a href="myProfile.html" th:href="@{/myProfile}">Mój profil</a>
+				<a id="myProfileLink" href="myProfile.html" th:href="@{/myProfile}">Mój profil</a>
 			</li>
 		</ul>
 		<script>
@@ -51,6 +51,7 @@
 			$("#invitationCounter").text($("#invitationCounter").text() - 1);
 			if($("#invitationCounter").text() == 0) {
 				$("#invitationCounter").fadeOut();
+				$("#invitationsDropdown").innerHTML = "NIE MASZ NOWYCH ZAPROSZEŃ";
 			}
 		}
 
@@ -117,16 +118,16 @@
 	<div th:fragment="leftColumnFrond" class="left-column">
 		<div >
 			<img class="profilePhoto" alt="Profilowe" src="../../resources/images/moose-avatar.jpg" 
-				th:alt="${user.firstName}" th:src="@{/profile/} + ${user.userId} + '/imageDisplay'" />
+				th:alt="${profile.firstName}" th:src="@{/profile/} + ${profile.userId} + '/imageDisplay'" />
 			<h1 class="name" th:text="${user.firstName}+' '+${user.lastName}">
 				Jan Kowalski
 			</h1>
 			<hr>
 			<h1 class="menu">
-				<p class="menu"><a href="profile.html" th:href="@{/profile/} +  ${user.userId}" >Łoś czasu</a></p>
-				<p class="menu"><a href="info.html" th:href="@{/info/} +  ${user.userId}">Informacje</a></p>
-				<p class="menu"><a href="fronds.html" th:href="@{/fronds/} +  ${user.userId}">Przyjaciule</a></p>
-				<p class="menu"><a href="albums.html" th:href="@{/albums/} +  ${user.userId}">Zdjęcia</a></p>
+				<p class="menu"><a href="profile.html" th:href="@{/profile/} +  ${profile.userId}" >Łoś czasu</a></p>
+				<p class="menu"><a href="info.html" th:href="@{/info/} +  ${profile.userId}">Informacje</a></p>
+				<p class="menu"><a href="fronds.html" th:href="@{/fronds/} +  ${profile.userId}">Przyjaciule</a></p>
+				<p class="menu"><a href="albums.html" th:href="@{/albums/} +  ${profile.userId}">Zdjęcia</a></p>
 			</h1>
 		</div>
 	</div>

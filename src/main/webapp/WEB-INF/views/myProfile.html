@@ -12,7 +12,7 @@
 
 <style>
 
-textarea {
+textarea.newStatus {
     width: 485px;
     height: 100px;
     padding: 6px;
@@ -26,7 +26,7 @@ textarea {
     float: left;
 }
 
-textarea:focus {
+textarea.newStatus:focus {
     border: 2px solid #555;
 }
 
@@ -80,7 +80,7 @@ p.feed-the-moose {
 	
 		<div class="center-column">
 			 <form id="feed-the-moose-form" method="GET" action="#" th:action="@{/myProfile/createTimeMooseStatus}" enctype="text/plain">
-				<textarea name="statusText" placeholder="Max 255 znaków bo bieda"></textarea>
+				<textarea class="newStatus" name="statusText" placeholder="Max 255 znaków bo bieda"></textarea>
 				<br/> 
 				<div id="feed-the-moose-div" class="feed-the-moose">
 					<img class="feed-the-moose" src="../../resources/images/moose_front.png"
@@ -89,14 +89,7 @@ p.feed-the-moose {
 				</div>
 			</form>
 			
-			<div class="time-mooose-status-div" th:each="timeMooseStatus : ${timeMooseStatusList}">
-				<img class="timeMooseStatusAvatar" alt="avatarXS" src="../../resources/images/moose-avatarxs.jpg"
-					 th:alt="${user.firstName}" th:src="@{/myProfile/miniatureDisplay}">
-				<p class="time-moose-status-user" th:text="${user.firstName}+' '+${user.lastName}">Jan Kowalski</p>
-				<p class="time-moose-status-date" th:text="${timeMooseStatus.creationDate}">01.01.2017</p>
-				<p class="time-moose-status-location"></p>
-				<div class="time-moose-status-content" th:text="${timeMooseStatus.text}">Tekst statusu</div>
-			</div>
+			<div th:replace ="~{statuses :: timeMoose}"></div>
 			
 		</div>
 		
@@ -106,6 +99,7 @@ p.feed-the-moose {
 
 </body>
 <script src="../../resources/floatingComponents.js" th:src="@{/resources/floatingComponents.js}"></script>
+<script src="../../resources/comments.js" th:src="@{/resources/comments.js}"></script>
 <script>
 
 	$("#feed-the-moose-div").click(function() {

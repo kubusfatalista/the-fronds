@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
+<link rel="stylesheet" type="text/css" href="../../resources/mainStyle.css" th:href="@{/resources/mainStyle.css}">
+<link rel="stylesheet" href="../../resources/font-awesome/css/font-awesome.min.css" th:href="@{/resources/font-awesome/css/font-awesome.min.css}">
+<link rel="icon" href="../../resources/images/moose_front.png" th:href="@{/resources/images/moose_front.png}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster&subset=latin-ext">
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Sansita&subset=latin-ext">
 <style>
-
-
 
 div.main {
 	margin-left: auto;
@@ -18,72 +20,6 @@ div.main {
 	padding: 10px; /* trzeba robic padding   */
 }
 
-div.status-container {
-	/* margin: 50px; nie mozna tak, bo margin childrena sumuje sie z marginem parenta, mimo ze sa 'nested'  */
-	height: auto;
-	background-color: tomato;
-	border-radius: 10px;
-	padding: 5px;
-}
-
-/* The CSS docs are very clear about this: parent elements NEVER expand to contain floated elements */
-/* :(( */
-
-div.statusTop {
-	height: auto;
-	display: flex;
-	width: 100%;
-	background-color: yellowgreen;
-}
-
-div.statusMiddle {
-	height: 50px;
-	background-color: beige;
-}
-
-div.statusBottom {
-	height: 10px;
-	background-color: aqua;
-}
-
-img.avatarSmall {
-	border-radius:50%;
-	display: block; /* "By default, an image is rendered inline", dlatego pod obrazkiem jest kawalek wolnego miejsca jak nie damy tej linijki */
-}
-
-div.nameDateLocation {
-	height: 50px;
-	width: 100%;
-	background-color: DarkGoldenRod;
-	display: -webkit-flex;
-    display: flex;
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-}
-
-p.statusUserName {
-	margin: 2px;
-	width: 400px;
-	font-family: Sansita;
-	font-size: 14px;
-}
-
-p.statusDate {
-	text-align: right;
-	margin: 2px;
-	width: 330px;
-	font-family: Sansita;
-	font-size: 14px;
-}
-
-p.statusLocation {
-	margin: 2px;
-	font-family: Sansita;
-	font-size: 14px;
-	width: 500px;
-}
-
-
 
 </style>
 
@@ -92,29 +28,36 @@ p.statusLocation {
 <body>
 
 	<div class="main">
-		<div class="status-container">
-			<!-- 
-							<p>Mieszko Pierwszy</p>
-				<p>01.01.2017 16:39</p>
-				<p>Polska</p> -->
-			<div class="statusTop">
-				<!--<div class="imageDiv"> -->
-					<img class="avatarSmall" src="C:/mieszkoXS.jpg"/>
-				<!--</div> -->
-				<div class="nameDateLocation">
-					<p class="statusUserName">Mieszko Pierwszy</p>
-					<p class="statusDate">01.01.2017 16:39</p>
-					<p class="statusLocation">Polska</p>
+		<div class="status-container"  th:each="timeMooseStatus : ${timeMooseStatusList}">
+			<div class="flex100">
+				<img class="avatarSmall margin5px" alt="avatarXS" src="../../resources/images/moose-avatarxs.jpg"
+				 th:alt="${user.firstName}" th:src="@{/myProfile/miniatureDisplay}">
+				<div class="nameDateLocationContainer margin5px">
+					<div class="flex100">
+						<p class="margin0px padding0px sansita16" th:text="${user.firstName}+' '+${user.lastName}">
+							Jan Kowalski
+						</p>
+						<p class="margin0px padding0px autoMarginleft sansita16" th:text="${timeMooseStatus.creationDate}">
+							01.01.2017
+						</p>
+					</div>
+					<p class="statusLocation padding0px sansita16"><p>
 				</div>
 			</div>
-			<div class="statusMiddle">
-
+			<div class="statusMiddle margin5px padding5px sansita18" th:text="${timeMooseStatus.text}">
+				Status content
 			</div>
-			<div class="statusBottom">
-
+			<hr class="margin0px padding0px">
+			<div class="statusBottom padding5px">
+				<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+				<p class="lajksAndHejts padding0px sansita16">Lajk</p>
+				<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+				<p class="lajksAndHejts sansita16">Hejt</p>
+				<i class="fa fa-comment autoMarginleft" aria-hidden="true"></i>
+				<p class="lajksAndHejts sansita16">Komcie</p>
 			</div>
-			
 		</div>
+		
 	</div>
 	
 </body>

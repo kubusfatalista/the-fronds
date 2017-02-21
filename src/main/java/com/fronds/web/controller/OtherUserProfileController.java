@@ -46,7 +46,8 @@ public class OtherUserProfileController {
 	public String otherUserProfile(@PathVariable int profileId, Model model, HttpSession session) {
 		if(profileId == (int) session.getAttribute(Attributes.USER_ID))
 			return "redirect:/myProfile";
-		model.addAttribute(userService.getUserById(profileId));
+		model.addAttribute(userService.getUserById((int) session.getAttribute(Attributes.USER_ID)));
+		model.addAttribute("profile", userService.getUserById(profileId));
 		model.addAttribute(timeMooseStatusService.getTimeMooseStatusesForUserId(profileId));
 		return "profile";
 	}

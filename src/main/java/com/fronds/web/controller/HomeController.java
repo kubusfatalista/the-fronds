@@ -33,7 +33,7 @@ import com.fronds.util.FileRepository;
  * Created by Qbek on 2016-12-11.
  */
 @Controller
-@RequestMapping({"/", "/homepage"})
+@RequestMapping({"/", "/homepage", "/login"})
 public class HomeController {
 	
 	private static final Logger logger = Logger.getLogger(HomeController.class);

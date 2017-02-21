@@ -58,7 +58,7 @@
 	
 		<div class="center-column flex">
 			<div th:each="frond : ${relationshipList}" class="card" 
-				th:id="|frondCardId${frond.friend.userId}|" th:onclick="|openProfile(${frond.friend.userId})|" >
+				 th:onclick="|openProfile(${frond.friend.userId})|" >
 				<img class="frondImage" alt="Jan" src="../../resources/images/moose-avatar.jpg"
 					th:alt="${frond.friend.firstName}" th:src="@{allUsers/imageDisplay/} + ${frond.friend.profilePicture} + 'm'"/>
 			  <div class="container">
